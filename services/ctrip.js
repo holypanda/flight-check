@@ -55,8 +55,9 @@ function callPythonCrawler(toCode = DESTINATION_CODE, fromCode = ORIGIN_CODE, mo
             '--from-code', fromCode,
             '--to-code', toCode,
             '--days', '30',
-            '--min-departure-time', '20:00',
-            '--min-return-time', '20:00'
+            '--min-departure-time', '19:45',  // 去程 19:45 后出发
+            '--min-return-time', '19:45',     // 返程 19:45 后出发
+            '--hk-express-only'  // 只搜索香港快运航空
         ];
         
         if (mode === 'outbound') {
@@ -136,18 +137,20 @@ async function searchFlights(apiKey) {
             { outbound: 'NRT', returnFrom: 'HND', name: 'NRT去-HND回' }
         ];
         
-        // 并行搜索所有组合
-        const results = await Promise.all(
-            combinations.map(async (combo) => {
-                try {
-                    const result = await callPythonCrawler(combo.outbound, ORIGIN_CODE, 'roundtrip', combo.returnFrom);
-                    return { combo, result };
-                } catch (err) {
-                    console.log(`Search failed for ${combo.name}:`, err.message);
-                    return { combo, result: { prices: [], error: err.message } };
-                }
-            })
-        );
+        // 串行搜索所有组合（避免并发触发反爬）
+        const results = [];
+        for (const combo of combinations) {
+            try {
+                console.log(`\n[${combo.name}] Starting search...`);
+                const result = await callPythonCrawler(combo.outbound, ORIGIN_CODE, 'roundtrip', combo.returnFrom);
+                results.push({ combo, result });
+                // 添加延迟避免请求过快
+                await new Promise(resolve => setTimeout(resolve, 5000));
+            } catch (err) {
+                console.log(`Search failed for ${combo.name}:`, err.message);
+                results.push({ combo, result: { prices: [], error: err.message } });
+            }
+        }
         
         // 合并所有结果
         let allPrices = [];

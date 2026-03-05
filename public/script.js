@@ -133,11 +133,27 @@ document.addEventListener('DOMContentLoaded', () => {
             return '<span class="weather-loading">加载中...</span>';
         }
         
+        const isMobile = window.innerWidth <= 768;
         const icon = getWeatherIcon(weather.weather?.main, weather.weather?.icon);
         const temp = weather.temp?.day !== undefined ? `${weather.temp.day}°C` : '-';
         const desc = weather.weather?.description || '';
         const snow = weather.snow > 0 ? `降雪 ${weather.snow}cm` : '';
         const snowCond = getSnowConditionDisplay(weather.snowCondition);
+        
+        if (isMobile) {
+            // 移动端紧凑显示
+            return `
+                <div class="weather-info">
+                    <div class="weather-main">
+                        <span class="weather-icon">${icon}</span>
+                        <span class="weather-temp">${temp}</span>
+                    </div>
+                    <div class="snow-condition" style="color: ${snowCond.color}; font-weight: bold; font-size: 0.85em;">
+                        ${snowCond.emoji} ${snowCond.text}
+                    </div>
+                </div>
+            `;
+        }
         
         return `
             <div class="weather-info">
@@ -295,14 +311,35 @@ document.addEventListener('DOMContentLoaded', () => {
             const isMixed = flight.mixedAirports || (returnFromAirport !== toAirport);
             
             const formatShortDate = (d) => d ? d.substring(5) : '-';
-            const dateDisplay = flight.returnDate ?
-                `${formatShortDate(flight.date)} ↓ ${formatShortDate(flight.returnDate)}` :
-                formatShortDate(flight.date);
+            // 检测是否为移动端
+            const isMobile = window.innerWidth <= 768;
+            
+            let dateDisplay;
+            if (isMobile) {
+                // 移动端紧凑显示
+                dateDisplay = flight.returnDate ?
+                    `<small>${formatShortDate(flight.date)}→${formatShortDate(flight.returnDate)}</small>` :
+                    formatShortDate(flight.date);
+            } else {
+                dateDisplay = flight.returnDate ?
+                    `${formatShortDate(flight.date)} ↓ ${formatShortDate(flight.returnDate)}` :
+                    formatShortDate(flight.date);
+            }
 
-            const outboundStr = `${flight.flightNumber || '-'} ${fromAirport}→${toAirport} ${flight.departureTime || '-'}→${flight.arrivalTime || '-'}`;
-            const returnStr = flight.returnFlightNumber ? 
-                `${flight.returnFlightNumber} ${returnFromAirport}→${returnToAirport} ${flight.returnDepartureTime || '-'}→${flight.returnArrivalTime || '-'}` : 
-                '-';
+            // 航班信息格式化
+            let outboundStr, returnStr;
+            if (isMobile) {
+                // 移动端简化显示
+                outboundStr = `${flight.flightNumber || '-'} <span class="airport-route">${fromAirport}→${toAirport}</span> ${flight.departureTime || '-'}`;
+                returnStr = flight.returnFlightNumber ? 
+                    `${flight.returnFlightNumber} <span class="airport-route">${returnFromAirport}→${returnToAirport}</span> ${flight.returnDepartureTime || '-'}` : 
+                    '-';
+            } else {
+                outboundStr = `${flight.flightNumber || '-'} ${fromAirport}→${toAirport} ${flight.departureTime || '-'}→${flight.arrivalTime || '-'}`;
+                returnStr = flight.returnFlightNumber ? 
+                    `${flight.returnFlightNumber} ${returnFromAirport}→${returnToAirport} ${flight.returnDepartureTime || '-'}→${flight.returnArrivalTime || '-'}` : 
+                    '-';
+            }
             
             const flightInfoDisplay = `
                 <div class="flight-line">🛫 ${outboundStr}</div>
@@ -532,4 +569,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial load
     checkConfig();
     fetchData();
+    
+    // 窗口大小变化时重新渲染表格（移动端/桌面端切换）
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            if (historyData.length > 0) {
+                renderTable(historyData.length - 1);
+            }
+        }, 250);
+    });
 });
