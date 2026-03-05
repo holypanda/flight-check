@@ -1,163 +1,124 @@
-const { spawn } = require('child_process');
-const path = require('path');
+/**
+ * Ctrip Flight Service - Playwright Version
+ * 使用 Playwright 重构的携程航班服务层
+ */
+
+const { CtripPlaywrightCrawler, getTargetDates, DEFAULT_ALLOWED_AIRLINES } = require('./ctrip_playwright');
 
 const ORIGIN_CITY = '香港';
 const DESTINATION_CITY = '东京';
 const ORIGIN_CODE = 'HKG';
-const DESTINATION_CODES = ['HND', 'NRT']; // 羽田机场和成田机场
-const DESTINATION_CODE = 'HND'; // 默认机场代码
+const DESTINATION_CODES = ['HND', 'NRT'];
+const DESTINATION_CODE = 'HND';
 
-// Helper: Get next 30 days Fri-Sun pairs
-function getTargetDates() {
-    const dates = [];
-    const today = new Date();
-    const limit = new Date();
-    limit.setDate(today.getDate() + 30);
-
-    let current = new Date(today);
-
-    // Find next Friday
-    while (current.getDay() !== 5) {
-        current.setDate(current.getDate() + 1);
-    }
-
-    while (current <= limit) {
-        const departureDate = new Date(current);
-        const returnDate = new Date(current);
-        returnDate.setDate(departureDate.getDate() + 2); // Sunday is 2 days after Friday
-
-        dates.push({
-            depart: departureDate.toISOString().split('T')[0],
-            return: returnDate.toISOString().split('T')[0]
-        });
-
-        // Next Friday
-        current.setDate(current.getDate() + 7);
-    }
-
-    return dates;
-}
-
-// Keep prices in CNY (original currency from crawler)
+// 保持价格精度
 function keepCny(cny) {
     return Math.round(cny * 100) / 100;
 }
 
-// Call Python crawler
-// mode: 'roundtrip' | 'outbound' | 'return'
-function callPythonCrawler(toCode = DESTINATION_CODE, fromCode = ORIGIN_CODE, mode = 'roundtrip', returnFromCode = null) {
-    return new Promise((resolve, reject) => {
-        const scriptPath = path.join(__dirname, 'ctrip_crawler.py');
-        const args = [
-            scriptPath,
-            '--from-city', ORIGIN_CITY,
-            '--to-city', DESTINATION_CITY,
-            '--from-code', fromCode,
-            '--to-code', toCode,
-            '--days', '30',
-            '--min-departure-time', '19:45',  // 去程 19:45 后出发
-            '--min-return-time', '19:45',     // 返程 19:45 后出发
-            '--hk-express-only'  // 只搜索香港快运航空
-        ];
-        
-        if (mode === 'outbound') {
-            args.push('--search-one-way');
-        } else if (mode === 'return') {
-            args.push('--search-one-way');
-            if (returnFromCode) {
-                args.push('--return-from-code', returnFromCode);
+/**
+ * 搜索指定机场组合的航班
+ */
+async function searchAirportCombo(combo, options = {}) {
+    const {
+        days = 30,
+        minDepartureTime = '19:45',
+        minReturnTime = '19:45',
+        hkExpressOnly = true,
+    } = options;
+
+    console.log(`\n[${combo.name}] Starting search...`);
+
+    const crawler = new CtripPlaywrightCrawler({
+        hkExpressOnly,
+        minDepartureTime,
+        minReturnTime,
+        allowedAirlines: hkExpressOnly ? DEFAULT_ALLOWED_AIRLINES : null,
+    });
+
+    const datePairs = getTargetDates(days);
+    const results = [];
+
+    try {
+        for (const pair of datePairs) {
+            try {
+                console.log(`  Searching ${pair.depart} ~ ${pair.return}...`);
+
+                const result = await crawler.searchRoundTrip(
+                    ORIGIN_CITY,
+                    DESTINATION_CITY,
+                    ORIGIN_CODE,
+                    combo.outbound,
+                    pair.depart,
+                    pair.return,
+                    combo.returnFrom
+                );
+
+                if (result) {
+                    results.push({
+                        ...result,
+                        outboundAirport: combo.outbound,
+                        returnAirport: combo.returnFrom,
+                        comboName: combo.name,
+                        mixedAirports: combo.outbound !== combo.returnFrom,
+                    });
+                }
+
+                // 添加延迟避免请求过快
+                await new Promise(resolve => setTimeout(resolve, 3000));
+
+            } catch (err) {
+                console.error(`  Error for ${pair.depart}:`, err.message);
             }
-        } else if (returnFromCode) {
-            args.push('--return-from-code', returnFromCode);
         }
 
-        console.log(`Starting Ctrip crawler (mode=${mode}, ${fromCode}->${toCode}${returnFromCode ? ', return from ' + returnFromCode : ''})...`);
-        
-        // Use virtual environment Python if available
-        const venvPython = path.join(__dirname, '..', 'venv', 'bin', 'python3');
-        const pythonCmd = require('fs').existsSync(venvPython) ? venvPython : 'python3';
-        
-        const pythonProcess = spawn(pythonCmd, args, {
-            cwd: __dirname,
-            timeout: 300000 // 5 minute timeout
-        });
+        console.log(`[${combo.name}] Found ${results.length} results`);
+        return { combo, results };
 
-        let stdout = '';
-        let stderr = '';
-
-        pythonProcess.stdout.on('data', (data) => {
-            stdout += data.toString();
-        });
-
-        pythonProcess.stderr.on('data', (data) => {
-            const msg = data.toString().trim();
-            if (msg) {
-                console.log(`[Crawler] ${msg}`);
-                stderr += msg + '\n';
-            }
-        });
-
-        pythonProcess.on('close', (code) => {
-            if (code !== 0) {
-                console.error(`Crawler process exited with code ${code}`);
-            }
-
-            try {
-                // Find JSON output in stdout
-                const jsonMatch = stdout.match(/\{[\s\S]*\}/);
-                if (jsonMatch) {
-                    const result = JSON.parse(jsonMatch[0]);
-                    resolve(result);
-                } else {
-                    reject(new Error('No valid JSON output from crawler'));
-                }
-            } catch (error) {
-                console.error('Failed to parse crawler output:', error);
-                console.error('Raw output:', stdout);
-                reject(new Error(`Failed to parse crawler output: ${error.message}`));
-            }
-        });
-
-        pythonProcess.on('error', (error) => {
-            console.error('Failed to start crawler:', error);
-            reject(new Error(`Failed to start crawler: ${error.message}. Make sure Python3 is installed.`));
-        });
-    });
+    } finally {
+        await crawler.close();
+    }
 }
 
+/**
+ * 搜索所有机场组合的航班
+ */
 async function searchFlights(apiKey) {
     try {
-        // 搜索所有组合
         console.log('Searching all airport combinations for best mixed-airport deals...');
-        
+
         const combinations = [
             { outbound: 'HND', returnFrom: 'HND', name: 'HND往返' },
             { outbound: 'HND', returnFrom: 'NRT', name: 'HND去-NRT回' },
             { outbound: 'NRT', returnFrom: 'NRT', name: 'NRT往返' },
             { outbound: 'NRT', returnFrom: 'HND', name: 'NRT去-HND回' }
         ];
-        
+
         // 串行搜索所有组合（避免并发触发反爬）
-        const results = [];
+        const allResults = [];
         for (const combo of combinations) {
             try {
-                console.log(`\n[${combo.name}] Starting search...`);
-                const result = await callPythonCrawler(combo.outbound, ORIGIN_CODE, 'roundtrip', combo.returnFrom);
-                results.push({ combo, result });
-                // 添加延迟避免请求过快
+                const { results } = await searchAirportCombo(combo, {
+                    days: 30,
+                    minDepartureTime: '19:45',
+                    minReturnTime: '19:45',
+                    hkExpressOnly: true,
+                });
+                allResults.push({ combo, results });
+                // 组合间延迟
                 await new Promise(resolve => setTimeout(resolve, 5000));
             } catch (err) {
-                console.log(`Search failed for ${combo.name}:`, err.message);
-                results.push({ combo, result: { prices: [], error: err.message } });
+                console.error(`Search failed for ${combo.name}:`, err.message);
+                allResults.push({ combo, results: [] });
             }
         }
-        
+
         // 合并所有结果
         let allPrices = [];
-        results.forEach(({ combo, result }) => {
-            if (result.prices && result.prices.length > 0) {
-                console.log(`Found ${result.prices.length} results for ${combo.name}`);
-                const flightsWithCombo = result.prices.map(flight => ({
+        allResults.forEach(({ combo, results }) => {
+            if (results && results.length > 0) {
+                console.log(`Found ${results.length} results for ${combo.name}`);
+                const flightsWithCombo = results.map(flight => ({
                     ...flight,
                     outboundAirport: combo.outbound,
                     returnAirport: combo.returnFrom,
@@ -169,7 +130,7 @@ async function searchFlights(apiKey) {
                 allPrices = allPrices.concat(flightsWithCombo);
             }
         });
-        
+
         // 按日期分组，为每个日期选择最便宜的组合
         const dateGroups = {};
         allPrices.forEach(flight => {
@@ -179,7 +140,7 @@ async function searchFlights(apiKey) {
             }
             dateGroups[date].push(flight);
         });
-        
+
         // 为每个日期选择最便宜的选项
         let bestPrices = [];
         Object.keys(dateGroups).forEach(date => {
@@ -189,24 +150,17 @@ async function searchFlights(apiKey) {
             console.log(`Date ${date}: Best option is ${cheapest.comboName} at CNY ${cheapest.price}`);
             bestPrices.push(cheapest);
         });
-        
+
         // 按日期排序
         bestPrices.sort((a, b) => new Date(a.date) - new Date(b.date));
-        
+
         // 如果没有结果，返回错误
         if (bestPrices.length === 0) {
             throw new Error('No flight results from any airport combination. The website may be blocking automated access.');
         }
-        
-        let result = {
-            timestamp: new Date().toISOString(),
-            prices: bestPrices,
-            source: 'ctrip',
-            mixedAirportSupport: true
-        };
-        
-        // Transform data to match expected format
-        const transformedPrices = result.prices.map(flight => ({
+
+        // 转换数据格式
+        const transformedPrices = bestPrices.map(flight => ({
             route: flight.route || `${ORIGIN_CODE}-${flight.toAirport || DESTINATION_CODE}`,
             from: ORIGIN_CODE,
             to: flight.toAirport || DESTINATION_CODE,
@@ -231,20 +185,34 @@ async function searchFlights(apiKey) {
             bookingUrl: flight.bookingUrl,
             outboundBookingUrl: flight.outboundBookingUrl,
             returnBookingUrl: flight.returnBookingUrl,
-            source: result.source || 'ctrip'
+            source: 'ctrip-playwright'
         }));
 
         return {
-            timestamp: result.timestamp || new Date().toISOString(),
-            prices: transformedPrices
+            timestamp: new Date().toISOString(),
+            prices: transformedPrices,
+            source: 'ctrip-playwright',
+            mixedAirportSupport: true
         };
-        
+
     } catch (error) {
-        console.error('Ctrip crawler failed:', error);
+        console.error('Ctrip Playwright crawler failed:', error);
         throw error;
     }
 }
 
+/**
+ * 测试单个机场组合的搜索
+ */
+async function testSearch() {
+    const combo = { outbound: 'HND', returnFrom: 'HND', name: 'HND往返' };
+    const result = await searchAirportCombo(combo, { days: 14 });
+    console.log('Test result:', JSON.stringify(result, null, 2));
+}
+
 module.exports = {
-    searchFlights
+    searchFlights,
+    searchAirportCombo,
+    testSearch,
+    getTargetDates
 };

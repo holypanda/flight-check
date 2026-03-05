@@ -41,6 +41,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return date.toLocaleString();
     };
 
+    // Helper: Format time to HH:MM (remove seconds if present)
+    const formatTime = (timeStr) => {
+        if (!timeStr) return '-';
+        // Handle formats like "19:45:00" or "2026-03-06T19:45:00"
+        const timePart = timeStr.includes('T') ? timeStr.split('T')[1] : 
+                        timeStr.includes(' ') ? timeStr.split(' ')[1] : timeStr;
+        const parts = timePart.split(':');
+        if (parts.length >= 2) {
+            return `${parts[0].padStart(2, '0')}:${parts[1].padStart(2, '0')}`;
+        }
+        return timeStr;
+    };
+
     // Helper: Escape HTML for data attribute
     const escapeHtml = (text) => {
         return text.replace(/&/g, '&amp;')
@@ -64,10 +77,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let text = `✈️ ${routeName} 往返机票\n`;
         text += `📅 ${dateStr}\n`;
-        text += `🛫 去程: ${flight.flightNumber} ${fromAirport}→${toAirport} ${flight.departureTime}-${flight.arrivalTime}\n`;
+        text += `🛫 去程: ${flight.flightNumber} ${fromAirport}→${toAirport} ${formatTime(flight.departureTime)}-${formatTime(flight.arrivalTime)}\n`;
         
         if (flight.returnFlightNumber) {
-            text += `🛬 返程: ${flight.returnFlightNumber} ${returnFromAirport}→${returnToAirport} ${flight.returnDepartureTime}-${flight.returnArrivalTime}\n`;
+            text += `🛬 返程: ${flight.returnFlightNumber} ${returnFromAirport}→${returnToAirport} ${formatTime(flight.returnDepartureTime)}-${formatTime(flight.returnArrivalTime)}\n`;
         }
         
         text += `💰 ${priceDisplay.replace(/<[^>]*>/g, '')}\n`;
@@ -129,8 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper: Format weather display for a date
     const formatWeatherDisplay = (weather) => {
-        if (!weather) {
-            return '<span class="weather-loading">加载中...</span>';
+        // 检查天气数据是否有效（空对象 {} 也视为无效）
+        if (!weather || Object.keys(weather).length === 0 || !weather.weather) {
+            return '<span class="weather-unavailable" title="天气数据暂时不可用">-</span>';
         }
         
         const isMobile = window.innerWidth <= 768;
@@ -326,18 +340,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     formatShortDate(flight.date);
             }
 
-            // 航班信息格式化
+            // 航班信息格式化（时间格式化为 HH:MM）
             let outboundStr, returnStr;
             if (isMobile) {
                 // 移动端简化显示
-                outboundStr = `${flight.flightNumber || '-'} <span class="airport-route">${fromAirport}→${toAirport}</span> ${flight.departureTime || '-'}`;
+                outboundStr = `${flight.flightNumber || '-'} <span class="airport-route">${fromAirport}→${toAirport}</span> ${formatTime(flight.departureTime)}`;
                 returnStr = flight.returnFlightNumber ? 
-                    `${flight.returnFlightNumber} <span class="airport-route">${returnFromAirport}→${returnToAirport}</span> ${flight.returnDepartureTime || '-'}` : 
+                    `${flight.returnFlightNumber} <span class="airport-route">${returnFromAirport}→${returnToAirport}</span> ${formatTime(flight.returnDepartureTime)}` : 
                     '-';
             } else {
-                outboundStr = `${flight.flightNumber || '-'} ${fromAirport}→${toAirport} ${flight.departureTime || '-'}→${flight.arrivalTime || '-'}`;
+                outboundStr = `${flight.flightNumber || '-'} ${fromAirport}→${toAirport} ${formatTime(flight.departureTime)}→${formatTime(flight.arrivalTime)}`;
                 returnStr = flight.returnFlightNumber ? 
-                    `${flight.returnFlightNumber} ${returnFromAirport}→${returnToAirport} ${flight.returnDepartureTime || '-'}→${flight.returnArrivalTime || '-'}` : 
+                    `${flight.returnFlightNumber} ${returnFromAirport}→${returnToAirport} ${formatTime(flight.returnDepartureTime)}→${formatTime(flight.returnArrivalTime)}` : 
                     '-';
             }
             

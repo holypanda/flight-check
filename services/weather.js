@@ -6,12 +6,28 @@
 
 const https = require('https');
 
+// 尝试使用 global fetch (Node 18+)，否则使用 https 模块
+const useFetch = typeof fetch !== 'undefined';
+
+/**
+ * 使用 fetch API 获取数据
+ */
+async function fetchGet(url) {
+    const response = await fetch(url, { 
+        signal: AbortSignal.timeout(15000)
+    });
+    if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+    }
+    return await response.json();
+}
+
 // 越后汤泽坐标 (Echigo-Yuzawa, Niigata, Japan)
 const YUZAWA_LAT = 36.93;
 const YUZAWA_LON = 138.82;
 
 /**
- * 发起 HTTPS 请求
+ * 发起 HTTPS 请求 (Node.js https 模块)
  */
 function httpsGet(url) {
     return new Promise((resolve, reject) => {
@@ -36,6 +52,20 @@ function httpsGet(url) {
 }
 
 /**
+ * 统一的数据获取接口
+ */
+async function httpGet(url) {
+    try {
+        // 优先尝试使用 fetch
+        return await fetchGet(url);
+    } catch (fetchErr) {
+        console.log('Fetch failed, falling back to https:', fetchErr.message);
+        // 如果 fetch 失败，回退到 https 模块
+        return await httpsGet(url);
+    }
+}
+
+/**
  * 获取天气预报（16天）
  * @returns {Promise<Array>} 天气数据数组
  */
@@ -43,7 +73,7 @@ async function getForecast() {
     // Open-Meteo API: 免费，无需 API key
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${YUZAWA_LAT}&longitude=${YUZAWA_LON}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,snowfall_sum,weathercode&timezone=Asia%2FTokyo&forecast_days=16`;
     
-    const data = await httpsGet(url);
+    const data = await httpGet(url);
     
     if (!data.daily) {
         throw new Error('Invalid response from Open-Meteo');
