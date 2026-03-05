@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Price Monitor</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✈️ 香港往返东京监测器</h1>
+            <p>每小时追踪香港快运航空票价 <span id="countdown" class="countdown"></span></p>
+        </header>
+
+        <main>
+            <div id="status-message" class="status">Loading data...</div>
+
+            <section class="config-section">
+                <h2>Configuration</h2>
+                <div class="filter-info" style="margin-bottom: 15px; padding: 10px; background: #e8f4f8; border-radius: 4px; font-size: 0.9em;">
+                    <strong>筛选条件：</strong>
+                    <span>📅 周五出发周日回</span> •
+                    <span>🌙 去程 20:00+</span> • 
+                    <span>🌙 返程 20:00+</span> •
+                    <span>📆 未来30天</span>
+                </div>
+                <div class="input-group" id="key-input-group">
+                    <span>点击按钮获取最新机票价格（需要约30秒）</span>
+                    <button id="save-key-btn" style="background-color: #27ae60;">🔄 更新价格</button>
+                </div>
+                <div class="input-group" id="key-display-group" style="display: none;">
+                    <span>爬虫状态: <span id="masked-key">运行中</span></span>
+                    <button id="save-key-btn" style="background-color: #27ae60;">🔄 更新价格</button>
+                    <button id="remove-key-btn" style="background-color: #ff4d4d;">停止</button>
+                </div>
+            </section>
+
+            <section class="chart-section">
+                <h2>Price Trend</h2>
+                <div class="chart-container">
+                    <canvas id="priceChart"></canvas>
+                </div>
+            </section>
+
+            <section class="latest-prices">
+                <h2>Latest Prices <span id="last-updated" class="timestamp"></span></h2>
+                <div class="table-container">
+                    <table id="prices-table">
+                        <thead>
+                            <tr>
+                                <th>路线</th>
+                                <th>日期</th>
+                                <th>航班信息</th>
+                                <th>价格</th>
+                                <th>越后汤泽天气/雪况 🏔️</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="history-log">
+                <h2>History Log</h2>
+                <ul id="history-list">
+                    <!-- History items will be inserted here -->
+                </ul>
+            </section>
+        </main>
+
+        <footer>
+            <p>Flight Price Monitor System &copy; 2026</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

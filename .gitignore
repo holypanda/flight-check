@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+*.pyc
+
+# Data files (generated)
+data/*.json
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Debug files
+/tmp/ctrip_debug_*.html
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

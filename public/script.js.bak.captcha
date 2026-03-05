@@ -1,0 +1,822 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const statusMessage = document.getElementById('status-message');
+    const lastUpdatedSpan = document.getElementById('last-updated');
+    const pricesTableBody = document.querySelector('#prices-table tbody');
+    const historyList = document.getElementById('history-list');
+    const saveKeyBtn = document.getElementById('save-key-btn');
+    // API key input removed - Ctrip crawler doesn't need it
+    const keyInputGroup = document.getElementById('key-input-group');
+    const keyDisplayGroup = document.getElementById('key-display-group');
+    const maskedKeySpan = document.getElementById('masked-key');
+    const removeKeyBtn = document.getElementById('remove-key-btn');
+    const priceChartCtx = document.getElementById('priceChart').getContext('2d');
+
+    let historyData = [];
+    let chartInstance = null;
+    let currentWeatherData = {}; // 存储当前显示的天气数据
+    let captchaCheckInterval = null; // 验证码检测轮询
+    let currentCaptchaId = null; // 当前验证码ID
+
+    // Helper: Show status message
+    function showStatus(message, type = 'info', duration = 3000) {
+        statusMessage.textContent = message;
+        statusMessage.className = `status ${type}`;
+        statusMessage.style.display = 'block';
+        if (duration > 0) {
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, duration);
+        }
+    }
+
+    // ==================== Captcha Handling ====================
+    
+    // Check captcha status from server
+    async function checkCaptchaStatus() {
+        try {
+            const response = await fetch('/api/captcha-status');
+            const data = await response.json();
+            
+            if (data.hasCaptcha) {
+                // Show captcha modal if not already showing
+                if (!currentCaptchaId || currentCaptchaId !== data.captcha.id) {
+                    showCaptchaModal(data.captcha);
+                }
+            } else {
+                // No pending captcha, hide modal if showing
+                hideCaptchaModal();
+            }
+        } catch (error) {
+            console.error('Error checking captcha status:', error);
+        }
+    }
+    
+    // Show captcha modal
+    function showCaptchaModal(captcha) {
+        currentCaptchaId = captcha.id;
+        
+        // Create modal if not exists
+        let modal = document.getElementById('captcha-modal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'captcha-modal';
+            modal.innerHTML = `
+                <div class="captcha-modal-overlay">
+                    <div class="captcha-modal-content">
+                        <div class="captcha-header">
+                            <h3>🛡️ 需要验证</h3>
+                            <p class="captcha-route"></p>
+                        </div>
+                        <div class="captcha-body">
+                            <p class="captcha-message"></p>
+                            <div class="captcha-screenshot-container">
+                                <img class="captcha-screenshot" alt="验证码截图" />
+                            </div>
+                            <div class="captcha-instructions">
+                                <p>⚠️ <strong>请在服务器上完成验证</strong></p>
+                                <p>由于验证码需要在浏览器中交互完成，请：</p>
+                                <ol>
+                                    <li>在服务器桌面上查看弹出的 Chrome 浏览器窗口</li>
+                                    <li>完成页面上的验证码（点选图标或滑动拼图）</li>
+                                    <li>完成后点击下方的"我已完成验证"按钮</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="captcha-footer">
+                            <button class="btn-captcha-complete">✅ 我已完成验证</button>
+                            <button class="btn-captcha-cancel">取消</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Add styles
+            const style = document.createElement('style');
+            style.textContent = `
+                .captcha-modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0,0,0,0.7);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                }
+                .captcha-modal-content {
+                    background: white;
+                    border-radius: 8px;
+                    max-width: 600px;
+                    width: 90%;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                }
+                .captcha-header {
+                    padding: 20px;
+                    border-bottom: 1px solid #eee;
+                    background: #fff3cd;
+                }
+                .captcha-header h3 {
+                    margin: 0 0 10px 0;
+                    color: #856404;
+                }
+                .captcha-route {
+                    margin: 0;
+                    color: #666;
+                    font-size: 14px;
+                }
+                .captcha-body {
+                    padding: 20px;
+                }
+                .captcha-message {
+                    margin: 0 0 15px 0;
+                    color: #333;
+                }
+                .captcha-screenshot-container {
+                    margin: 15px 0;
+                    text-align: center;
+                    background: #f5f5f5;
+                    padding: 10px;
+                    border-radius: 4px;
+                }
+                .captcha-screenshot {
+                    max-width: 100%;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                }
+                .captcha-instructions {
+                    background: #e7f3ff;
+                    padding: 15px;
+                    border-radius: 4px;
+                    margin-top: 15px;
+                }
+                .captcha-instructions p {
+                    margin: 0 0 10px 0;
+                }
+                .captcha-instructions ol {
+                    margin: 10px 0;
+                    padding-left: 20px;
+                }
+                .captcha-instructions li {
+                    margin: 5px 0;
+                }
+                .captcha-footer {
+                    padding: 20px;
+                    border-top: 1px solid #eee;
+                    display: flex;
+                    gap: 10px;
+                    justify-content: center;
+                }
+                .btn-captcha-complete {
+                    background: #28a745;
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+                .btn-captcha-complete:hover {
+                    background: #218838;
+                }
+                .btn-captcha-cancel {
+                    background: #6c757d;
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 16px;
+                }
+                .btn-captcha-cancel:hover {
+                    background: #5a6268;
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Bind events
+            modal.querySelector('.btn-captcha-complete').addEventListener('click', onCaptchaComplete);
+            modal.querySelector('.btn-captcha-cancel').addEventListener('click', hideCaptchaModal);
+        }
+        
+        // Update modal content
+        modal.querySelector('.captcha-route').textContent = `路线: ${captcha.route || '未知'} | 日期: ${captcha.date || '未知'}`;
+        modal.querySelector('.captcha-message').textContent = captcha.message || '请完成验证码验证';
+        
+        const screenshotImg = modal.querySelector('.captcha-screenshot');
+        if (captcha.screenshotBase64) {
+            screenshotImg.src = captcha.screenshotBase64;
+            screenshotImg.style.display = 'block';
+        } else {
+            screenshotImg.style.display = 'none';
+        }
+        
+        modal.style.display = 'block';
+        
+        // Show persistent status
+        showStatus('检测到验证码，请完成验证以继续爬取', 'warning', 0);
+    }
+    
+    // Hide captcha modal
+    function hideCaptchaModal() {
+        const modal = document.getElementById('captcha-modal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+        currentCaptchaId = null;
+        statusMessage.style.display = 'none';
+    }
+    
+    // Handle captcha completion
+    async function onCaptchaComplete() {
+        if (!currentCaptchaId) return;
+        
+        const btn = document.querySelector('.btn-captcha-complete');
+        btn.disabled = true;
+        btn.textContent = '确认中...';
+        
+        try {
+            const response = await fetch('/api/captcha-complete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ captchaId: currentCaptchaId })
+            });
+            
+            if (response.ok) {
+                showStatus('已确认完成验证，爬虫将继续...', 'info');
+                hideCaptchaModal();
+            } else {
+                const error = await response.json();
+                showStatus(error.error || '确认失败', 'error');
+                btn.disabled = false;
+                btn.textContent = '✅ 我已完成验证';
+            }
+        } catch (error) {
+            console.error('Error completing captcha:', error);
+            showStatus('网络错误，请重试', 'error');
+            btn.disabled = false;
+            btn.textContent = '✅ 我已完成验证';
+        }
+    }
+    
+    // Start captcha polling
+    function startCaptchaPolling() {
+        if (captchaCheckInterval) return;
+        captchaCheckInterval = setInterval(checkCaptchaStatus, 3000); // Check every 3 seconds
+    }
+    
+    // Stop captcha polling
+    function stopCaptchaPolling() {
+        if (captchaCheckInterval) {
+            clearInterval(captchaCheckInterval);
+            captchaCheckInterval = null;
+        }
+    }
+
+    // Helper: Format currency - 人民币不显示小数点
+    const formatCurrency = (amount, currency = 'USD') => {
+        if (currency === 'CNY') {
+            // 人民币显示为 ¥4,567 格式，无小数
+            return '¥' + Math.round(amount).toLocaleString('zh-CN');
+        }
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: currency
+        }).format(amount);
+    };
+
+    // Helper: Format date
+    const formatDate = (isoString) => {
+        const date = new Date(isoString);
+        return date.toLocaleString();
+    };
+
+    // Helper: Escape HTML for data attribute
+    const escapeHtml = (text) => {
+        return text.replace(/&/g, '&amp;')
+                   .replace(/</g, '&lt;')
+                   .replace(/>/g, '&gt;')
+                   .replace(/"/g, '&quot;')
+                   .replace(/'/g, '&#039;');
+    };
+
+    // Helper: Generate WeChat share text
+    const generateShareText = (flight, fromAirport, toAirport, returnFromAirport, isMixed, priceDisplay) => {
+        const formatShortDate = (d) => d ? d.substring(5) : '-';
+        const returnToAirport = fromAirport; // 返程目的地就是出发地
+        const dateStr = flight.returnDate ? 
+            `${formatShortDate(flight.date)} → ${formatShortDate(flight.returnDate)}` :
+            formatShortDate(flight.date);
+        
+        const routeName = isMixed ? 
+            `香港(${toAirport})→东京(${returnFromAirport})→香港` : 
+            `香港↔东京${toAirport}`;
+        
+        let text = `✈️ ${routeName} 往返机票\n`;
+        text += `📅 ${dateStr}\n`;
+        text += `🛫 去程: ${flight.flightNumber} ${fromAirport}→${toAirport} ${flight.departureTime}-${flight.arrivalTime}\n`;
+        
+        if (flight.returnFlightNumber) {
+            text += `🛬 返程: ${flight.returnFlightNumber} ${returnFromAirport}→${returnToAirport} ${flight.returnDepartureTime}-${flight.returnArrivalTime}\n`;
+        }
+        
+        text += `💰 ${priceDisplay.replace(/<[^>]*>/g, '')}\n`;
+        
+        if (flight.bookingUrl) {
+            text += `🔗 ${flight.bookingUrl}`;
+        }
+        
+        return text;
+    };
+
+    // Helper: Get weather icon HTML (Open-Meteo WMO codes)
+    const getWeatherIcon = (weatherMain, iconCode) => {
+        // First try to use weather main category
+        const mainEmojiMap = {
+            'Clear': '☀️',
+            'Clouds': '☁️',
+            'Fog': '🌫️',
+            'Drizzle': '🌧️',
+            'Rain': '🌧️',
+            'Snow': '❄️',
+            'Thunderstorm': '⛈️',
+            'Unknown': '❓'
+        };
+        
+        if (weatherMain && mainEmojiMap[weatherMain]) {
+            return mainEmojiMap[weatherMain];
+        }
+        
+        // Fallback to icon code mapping (for backward compatibility)
+        if (!iconCode) return '☀️';
+        const iconMap = {
+            '01d': '☀️', '01n': '🌙',
+            '02d': '⛅', '02n': '☁️',
+            '03d': '☁️', '03n': '☁️',
+            '04d': '☁️', '04n': '☁️',
+            '09d': '🌧️', '09n': '🌧️',
+            '10d': '🌦️', '10n': '🌧️',
+            '11d': '⛈️', '11n': '⛈️',
+            '13d': '❄️', '13n': '❄️',
+            '50d': '🌫️', '50n': '🌫️'
+        };
+        return iconMap[iconCode] || '☀️';
+    };
+
+    // Helper: Get snow condition emoji and color
+    const getSnowConditionDisplay = (snowCondition) => {
+        if (!snowCondition) return { emoji: '❓', color: '#999', text: '无数据' };
+        
+        const levelEmojis = ['❓', '⬜', '🟫', '🟨', '🟩', '❄️'];
+        const levelColors = ['#999', '#ccc', '#8B4513', '#FFD700', '#32CD32', '#00CED1'];
+        const levelTexts = ['无数据', '较差', '一般', '良好', '极佳', '粉雪'];
+        
+        const level = snowCondition.level || 1;
+        return {
+            emoji: levelEmojis[level] || levelEmojis[0],
+            color: levelColors[level] || levelColors[0],
+            text: snowCondition.description || levelTexts[level] || levelTexts[0]
+        };
+    };
+
+    // Helper: Format weather display for a date
+    const formatWeatherDisplay = (weather) => {
+        if (!weather) {
+            return '<span class="weather-loading">加载中...</span>';
+        }
+        
+        const icon = getWeatherIcon(weather.weather?.main, weather.weather?.icon);
+        const temp = weather.temp?.day !== undefined ? `${weather.temp.day}°C` : '-';
+        const desc = weather.weather?.description || '';
+        const snow = weather.snow > 0 ? `降雪 ${weather.snow}cm` : '';
+        const snowCond = getSnowConditionDisplay(weather.snowCondition);
+        
+        return `
+            <div class="weather-info">
+                <div class="weather-main">
+                    <span class="weather-icon">${icon}</span>
+                    <span class="weather-temp">${temp}</span>
+                </div>
+                <div class="weather-desc">${desc}${snow ? ' · ' + snow : ''}</div>
+                <div class="snow-condition" style="color: ${snowCond.color}; font-weight: bold;">
+                    ${snowCond.emoji} ${snowCond.text}
+                </div>
+            </div>
+        `;
+    };
+
+    // Helper: Copy text to clipboard
+    const copyToClipboard = async (text, rowElement) => {
+        try {
+            // 尝试使用现代 Clipboard API
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(text);
+            } else {
+                // 降级方案：使用 execCommand
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-9999px';
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            }
+            
+            // 添加已复制视觉反馈
+            rowElement.style.backgroundColor = '#d4edda';
+            showStatus('航班信息已复制', 'info');
+            setTimeout(() => {
+                rowElement.style.backgroundColor = '';
+            }, 1000);
+        } catch (err) {
+            console.error('Copy failed:', err);
+            showStatus('复制失败，请手动复制', 'error');
+        }
+    };
+
+    // Render Chart
+    function renderChart(snapshot) {
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+
+        if (!snapshot.prices || snapshot.prices.length === 0) {
+            return;
+        }
+
+        const labels = snapshot.prices.map(p => p.date);
+        const data = snapshot.prices.map(p => p.price);
+        const currency = snapshot.prices[0]?.currency || 'CNY';
+
+        // Find the index of the cheapest price
+        const minPrice = Math.min(...data);
+        const minPriceIndex = data.indexOf(minPrice);
+
+        // Create point background colors array - highlight cheapest in green
+        const pointBackgroundColors = data.map((_, index) => 
+            index === minPriceIndex ? '#27ae60' : '#4a90e2'
+        );
+        const pointRadii = data.map((_, index) => 
+            index === minPriceIndex ? 8 : 5
+        );
+        const pointHoverRadii = data.map((_, index) => 
+            index === minPriceIndex ? 10 : 7
+        );
+
+        chartInstance = new Chart(priceChartCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: `Price (${currency})`,
+                    data: data,
+                    borderColor: '#4a90e2',
+                    backgroundColor: 'rgba(74, 144, 226, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.1,
+                    pointBackgroundColor: pointBackgroundColors,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: pointRadii,
+                    pointHoverRadius: pointHoverRadii
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Flight Prices by Departure Date'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.parsed.y} ${currency}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Price'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Departure Date'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Render the prices table
+    function renderTable(dataIndex) {
+        pricesTableBody.innerHTML = '';
+
+        if (!historyData || historyData.length === 0) {
+            pricesTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;">暂无数据，请点击"更新价格"按钮获取航班信息</td></tr>';
+            return;
+        }
+
+        const currentSnapshot = historyData[dataIndex];
+        const previousSnapshot = dataIndex > 0 ? historyData[dataIndex - 1] : null;
+        
+        // 更新当前天气数据为选中 snapshot 的天气
+        currentWeatherData = currentSnapshot.weather || {};
+
+        lastUpdatedSpan.textContent = formatDate(currentSnapshot.timestamp);
+
+        renderChart(currentSnapshot);
+
+        // Find the cheapest flight
+        const cheapestFlight = currentSnapshot.prices.reduce((min, flight) => 
+            flight.price < min.price ? flight : min, currentSnapshot.prices[0]
+        );
+
+        currentSnapshot.prices.forEach((flight, index) => {
+            const row = document.createElement('tr');
+
+            // 获取机场代码（支持混搭机场）
+            const fromAirport = 'HKG';
+            const toAirport = flight.outboundAirport || flight.toAirport || 'HND';
+            const returnFromAirport = flight.returnAirport || flight.returnFromAirport || toAirport;
+            const returnToAirport = 'HKG';
+            
+            // 是否混搭机场
+            const isMixed = flight.mixedAirports || (returnFromAirport !== toAirport);
+            
+            // 简化日期显示：03-27 → 03-29
+            const formatShortDate = (d) => d ? d.substring(5) : '-';
+            const dateDisplay = flight.returnDate ?
+                `${formatShortDate(flight.date)} ↓ ${formatShortDate(flight.returnDate)}` :
+                formatShortDate(flight.date);
+
+            // 合并去程和返程航班信息到一列
+            const outboundStr = `${flight.flightNumber || '-'} ${fromAirport}→${toAirport} ${flight.departureTime || '-'}→${flight.arrivalTime || '-'}`;
+            const returnStr = flight.returnFlightNumber ? 
+                `${flight.returnFlightNumber} ${returnFromAirport}→${returnToAirport} ${flight.returnDepartureTime || '-'}→${flight.returnArrivalTime || '-'}` : 
+                '-';
+            
+            const flightInfoDisplay = `
+                <div class="flight-line">🛫 ${outboundStr}</div>
+                <div class="flight-line">🛬 ${returnStr}</div>
+            `;
+
+            // 航线显示（混搭时用🔄标记）
+            let routeDisplay;
+            if (isMixed) {
+                routeDisplay = `<strong>${fromAirport}-${toAirport}</strong><span class="mixed-badge" title="去程${toAirport}，返程${returnFromAirport}">🔄</span>`;
+            } else {
+                routeDisplay = `<strong>${fromAirport}-${toAirport}</strong>`;
+            }
+
+            // 价格
+            const priceDisplay = formatCurrency(flight.price, flight.currency);
+
+            // 生成微信分享文本
+            const priceText = flight.price ? `¥${flight.price}` : '-';
+            const shareText = generateShareText(flight, fromAirport, toAirport, returnFromAirport, isMixed, priceText);
+
+            // Highlight the cheapest flight
+            if (flight === cheapestFlight) {
+                row.classList.add('cheapest');
+            }
+
+            // 添加可点击复制的提示
+            row.style.cursor = 'pointer';
+            row.title = '点击复制航班信息';
+
+            // 获取出发日期的天气
+            const weather = currentWeatherData[flight.date];
+            const weatherDisplay = formatWeatherDisplay(weather);
+
+            row.innerHTML = `
+                <td class="col-route">${routeDisplay}</td>
+                <td class="col-date">${dateDisplay}</td>
+                <td class="col-flight">${flightInfoDisplay}</td>
+                <td class="col-price">${priceDisplay}</td>
+                <td class="col-weather">${weatherDisplay}</td>
+            `;
+
+            // 绑定整行点击复制事件
+            row.addEventListener('click', () => copyToClipboard(shareText, row));
+            pricesTableBody.appendChild(row);
+        });
+
+        // Update history list selection
+        document.querySelectorAll('#history-list li').forEach((li, idx) => {
+            if (idx === historyData.length - 1 - dataIndex) {
+                li.classList.add('selected');
+            } else {
+                li.classList.remove('selected');
+            }
+        });
+    }
+
+    // Render history list
+    function renderHistoryList() {
+        historyList.innerHTML = '';
+        // Show newest first
+        [...historyData].reverse().forEach((snapshot, index) => {
+            const li = document.createElement('li');
+            li.style.display = 'flex';
+            li.style.justifyContent = 'space-between';
+            li.style.alignItems = 'center';
+
+            const span = document.createElement('span');
+            span.textContent = `Snapshot: ${formatDate(snapshot.timestamp)}`;
+            span.style.cursor = 'pointer';
+            span.style.flexGrow = '1';
+
+            span.addEventListener('click', () => {
+                renderTable(historyData.length - 1 - index);
+            });
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = '&times;';
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.style.marginLeft = '10px';
+            deleteBtn.style.padding = '0 5px';
+            deleteBtn.style.color = 'red';
+            deleteBtn.style.border = 'none';
+            deleteBtn.style.background = 'none';
+            deleteBtn.style.cursor = 'pointer';
+            deleteBtn.style.fontSize = '1.2em';
+            deleteBtn.title = 'Delete Snapshot';
+
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (confirm('Are you sure you want to delete this snapshot?')) {
+                    deleteSnapshot(snapshot.id);
+                }
+            });
+
+            li.appendChild(span);
+            li.appendChild(deleteBtn);
+            historyList.appendChild(li);
+        });
+    }
+
+    // Delete snapshot
+    async function deleteSnapshot(id) {
+        try {
+            const response = await fetch(`/api/prices/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                showStatus('Snapshot deleted successfully', 'info');
+                fetchData(); // Reload data
+            } else {
+                throw new Error('Failed to delete snapshot');
+            }
+        } catch (error) {
+            console.error('Error deleting snapshot:', error);
+            showStatus('Error deleting snapshot', 'error');
+        }
+    }
+
+    // Fetch data from API
+    async function fetchData() {
+        try {
+            const response = await fetch('/api/prices');
+            if (!response.ok) throw new Error('Network response was not ok');
+
+            historyData = await response.json();
+
+            if (historyData.length > 0) {
+                // 获取最新的天气数据
+                const latestSnapshot = historyData[historyData.length - 1];
+                currentWeatherData = latestSnapshot.weather || {};
+                
+                renderHistoryList();
+                // Render the latest snapshot by default
+                renderTable(historyData.length - 1);
+            } else {
+                showStatus('No price history found.', 'info');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            showStatus('Failed to load price data.', 'error');
+        }
+    }
+    // Restart crawler handler - triggers search immediately
+    saveKeyBtn.addEventListener('click', async () => {
+        saveKeyBtn.disabled = true;
+        saveKeyBtn.textContent = '爬取中...';
+        
+        // Start captcha polling when crawler starts
+        startCaptchaPolling();
+
+        try {
+            const response = await fetch('/api/restart-crawler', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || 'Failed to restart crawler');
+            }
+
+            showStatus('价格已更新!', 'info');
+            await fetchData(); // Reload data
+            checkConfig(); // Update UI
+        } catch (error) {
+            console.error('Error restarting crawler:', error);
+            showStatus(error.message, 'error');
+        } finally {
+            saveKeyBtn.disabled = false;
+            saveKeyBtn.textContent = '更新价格';
+            // Stop polling after crawler finishes (with delay to catch any late captchas)
+            setTimeout(stopCaptchaPolling, 10000);
+        }
+    });
+
+    // Check if crawler is enabled
+    async function checkConfig() {
+        try {
+            const response = await fetch('/api/config');
+            const data = await response.json();
+
+            if (data.hasApiKey) {
+                // Show both groups when enabled - update price button always visible
+                keyInputGroup.style.display = 'none';
+                keyDisplayGroup.style.display = 'flex';
+                keyDisplayGroup.style.alignItems = 'center';
+                keyDisplayGroup.style.gap = '10px';
+                maskedKeySpan.textContent = '运行中';
+            } else {
+                keyInputGroup.style.display = 'flex';
+                keyInputGroup.style.alignItems = 'center';
+                keyInputGroup.style.gap = '10px';
+                keyDisplayGroup.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error checking config:', error);
+        }
+    }
+
+    // Disable crawler handler
+    removeKeyBtn.addEventListener('click', async () => {
+        if (!confirm('Are you sure you want to disable the crawler?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/config', { method: 'DELETE' });
+            if (response.ok) {
+                showStatus('Crawler disabled', 'info');
+                checkConfig();
+            } else {
+                throw new Error('Failed to disable crawler');
+            }
+        } catch (error) {
+            console.error('Error disabling crawler:', error);
+            showStatus('Error disabling crawler', 'error');
+        }
+    });
+
+    // Countdown timer for next update
+    function updateCountdown() {
+        const now = new Date();
+        const nextHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1, 0, 0);
+        const diff = nextHour - now;
+        
+        const minutes = Math.floor(diff / 60000);
+        const seconds = Math.floor((diff % 60000) / 1000);
+        
+        const countdownEl = document.getElementById('countdown');
+        if (countdownEl) {
+            countdownEl.textContent = `(下次更新: ${minutes}分${seconds.toString().padStart(2, '0')}秒后)`;
+        }
+    }
+    
+    // Update countdown every second
+    setInterval(updateCountdown, 1000);
+    updateCountdown(); // Initial call
+
+    // Initial load
+    checkConfig();
+    fetchData();
+    
+    // Start captcha polling (will check periodically if there's a captcha to solve)
+    startCaptchaPolling();
+});
