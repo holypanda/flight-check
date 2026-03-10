@@ -1,6 +1,6 @@
 # Python dependencies for Ctrip Crawler
 # Install with: pip install -r requirements.txt
 
-selenium-wire>=5.1.1
+selenium-wire>=5.1.0
 selenium>=4.15.0
 pandas>=2.0.0

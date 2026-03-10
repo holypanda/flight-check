@@ -16,7 +16,17 @@ import json
 import sys
 import os
 import time
+import random
 from datetime import datetime, timedelta
+
+# User-Agent 轮换列表
+USER_AGENTS = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0',
+]
 
 # Try to import selenium dependencies
 try:
@@ -62,6 +72,7 @@ class CtripCrawler:
         if self.headless:
             options.add_argument('--headless=new')
         
+        # 基础参数
         options.add_argument('--incognito')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
@@ -70,17 +81,59 @@ class CtripCrawler:
         options.add_argument('--disable-gpu')
         options.add_argument('--ignore-certificate-errors')
         options.add_argument('--window-size=1920,1080')
-        options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
-        options.add_experimental_option('excludeSwitches', ['enable-automation'])
+        
+        # 随机 User-Agent
+        user_agent = random.choice(USER_AGENTS)
+        options.add_argument(f'--user-agent={user_agent}')
+        print(f"Using User-Agent: {user_agent[:50]}...", file=sys.stderr)
+        
+        # 禁用自动化检测
+        options.add_experimental_option('excludeSwitches', ['enable-automation', 'enable-logging'])
         options.add_experimental_option('useAutomationExtension', False)
         
+        # 添加额外的隐私和反检测参数
+        options.add_argument('--disable-features=IsolateOrigins,site-per-process')
+        options.add_argument('--disable-site-isolation-trials')
+        options.add_argument('--disable-web-security')
+        options.add_argument('--disable-features=BlockInsecurePrivateNetworkRequests')
+        options.add_argument('--disable-blink-features=AutomationControlled')
+        options.add_argument('--lang=zh-CN,zh,en-US,en')
+        options.add_argument('--timezone=Asia/Shanghai')
+        
+        # Fix for snap Chromium / DevToolsActivePort error
+        options.add_argument('--remote-debugging-pipe')  # 使用 pipe 而不是端口
+        options.add_argument('--disable-setuid-sandbox')
+        options.add_argument('--single-process')  # Required for running in container/snap environments
+        
+        # 额外的反爬参数
+        options.add_argument('--disable-background-networking')
+        options.add_argument('--disable-background-timer-throttling')
+        options.add_argument('--disable-backgrounding-occluded-windows')
+        options.add_argument('--disable-breakpad')
+        options.add_argument('--disable-component-update')
+        options.add_argument('--disable-default-apps')
+        options.add_argument('--disable-features=TranslateUI')
+        options.add_argument('--disable-hang-monitor')
+        options.add_argument('--disable-ipc-flooding-protection')
+        options.add_argument('--disable-popup-blocking')
+        options.add_argument('--disable-prompt-on-repost')
+        options.add_argument('--disable-renderer-backgrounding')
+        options.add_argument('--force-color-profile=srgb')
+        options.add_argument('--metrics-recording-only')
+        options.add_argument('--no-first-run')
+        options.add_argument('--safebrowsing-disable-auto-update')
+        options.add_argument('--password-store=basic')
+        options.add_argument('--use-mock-keychain')
+        
         # 检测 Chrome/Chromium 路径
+        # 注意：snap 安装的 Chromium 必须使用 /snap/bin/chromium 包装器命令
         chrome_paths = [
-            '/snap/chromium/current/usr/lib/chromium-browser/chrome',
-            '/usr/bin/google-chrome',
-            '/usr/bin/google-chrome-stable',
+            '/snap/bin/chromium',
             '/usr/bin/chromium',
             '/usr/bin/chromium-browser',
+            '/usr/bin/google-chrome',
+            '/usr/bin/google-chrome-stable',
+            '/snap/chromium/current/usr/lib/chromium-browser/chrome',
             '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
         ]
         
@@ -98,6 +151,30 @@ class CtripCrawler:
         
         try:
             self.driver = webdriver.Chrome(options=options)
+            
+            # 使用 CDP 隐藏 webdriver 特征
+            self.driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
+                'source': '''
+                    Object.defineProperty(navigator, 'webdriver', {
+                        get: () => undefined
+                    });
+                    Object.defineProperty(navigator, 'plugins', {
+                        get: () => [1, 2, 3, 4, 5]
+                    });
+                    Object.defineProperty(navigator, 'languages', {
+                        get: () => ['zh-CN', 'zh', 'en-US', 'en']
+                    });
+                    window.chrome = { runtime: {} };
+                '''
+            })
+            
+            # 修改 webdriver 属性
+            self.driver.execute_script('''
+                Object.defineProperty(navigator, 'webdriver', {
+                    get: () => undefined
+                });
+            ''')
+            
             if not self.headless:
                 self.driver.maximize_window()
             print("Chrome driver initialized successfully", file=sys.stderr)
@@ -137,7 +214,19 @@ class CtripCrawler:
             # 使用直接搜索URL（机场代码格式）
             url = f"https://flights.ctrip.com/online/list/oneway-{from_code}-{to_code}?depdate={date}"
             print(f"Accessing: {url}", file=sys.stderr)
+            
+            # 添加随机延迟，模拟真实用户 (3-8秒随机延迟)
+            delay = random.uniform(3, 8)
+            print(f"Waiting {delay:.1f}s before request...", file=sys.stderr)
+            time.sleep(delay)
+            
+            # 清理缓存和 cookies
+            self.driver.delete_all_cookies()
+            
             self.driver.get(url)
+            
+            # 页面加载后再次执行反检测脚本
+            self._hide_automation_features()
             
             # 等待航班列表加载
             try:
@@ -170,6 +259,10 @@ class CtripCrawler:
             # 尝试关闭弹窗
             self._close_popups()
             
+            # 如果只搜索香港快运航空，尝试点击筛选器
+            if self.allowed_airlines and len(self.allowed_airlines) == 1 and '香港快运' in self.allowed_airlines[0]:
+                self._filter_by_airline('香港快运')
+            
             # 获取航班数据
             flights = self._extract_flight_data(from_city, to_city, from_code, to_code, date)
             print(f"Extracted {len(flights)} flights for {date}", file=sys.stderr)
@@ -180,6 +273,51 @@ class CtripCrawler:
             traceback.print_exc(file=sys.stderr)
             
         return flights
+    
+    def _hide_automation_features(self):
+        """隐藏自动化特征，避免被检测"""
+        try:
+            self.driver.execute_script('''
+                // 覆盖 webdriver 属性
+                Object.defineProperty(navigator, 'webdriver', {
+                    get: () => undefined
+                });
+                
+                // 添加假的 plugins
+                Object.defineProperty(navigator, 'plugins', {
+                    get: () => {
+                        return [
+                            {name: 'Chrome PDF Plugin', filename: 'internal-pdf-viewer'},
+                            {name: 'Chrome PDF Viewer', filename: 'mhjfbmdgcfjbbpaeojofohoefgiehjai'},
+                            {name: 'Native Client', filename: 'internal-nacl-plugin'}
+                        ];
+                    }
+                });
+                
+                // 覆盖 permissions
+                if (navigator.permissions) {
+                    const originalQuery = navigator.permissions.query;
+                    navigator.permissions.query = (parameters) => {
+                        if (parameters.name === 'notifications') {
+                            return Promise.resolve({state: 'prompt'});
+                        }
+                        return originalQuery(parameters);
+                    };
+                }
+                
+                // 添加 chrome 对象
+                window.chrome = window.chrome || {};
+                window.chrome.runtime = window.chrome.runtime || {};
+                
+                // 覆盖 notification 权限
+                if (window.Notification) {
+                    Object.defineProperty(Notification, 'permission', {
+                        get: () => 'default'
+                    });
+                }
+            ''')
+        except Exception as e:
+            print(f"Error hiding automation features: {e}", file=sys.stderr)
     
     def _close_popups(self):
         """关闭弹窗和广告"""
@@ -195,6 +333,64 @@ class CtripCrawler:
             self.driver.execute_script(js_close)
         except:
             pass
+    
+    def _filter_by_airline(self, airline_name):
+        """通过页面筛选器选择指定航空公司"""
+        try:
+            print(f"Trying to filter by airline: {airline_name}", file=sys.stderr)
+            
+            # 尝试找到航空公司筛选区域并点击
+            # 常见的选择器模式
+            airline_selectors = [
+                # 航空公司筛选标题
+                "//div[contains(text(), '航空公司') or contains(@class, 'airline-filter')]",
+                "//span[contains(text(), '航空公司')]",
+                # 香港快运航空复选框
+                "//span[contains(text(), '香港快运') or contains(text(), 'UO')]/ancestor::label",
+                "//div[contains(text(), '香港快运') or contains(text(), 'UO')]",
+                # 更多选择器
+                "//*[contains(@class, 'filter-airline')]",
+            ]
+            
+            # 先尝试展开筛选器（如果需要）
+            for selector in airline_selectors[:2]:
+                try:
+                    elements = self.driver.find_elements(By.XPATH, selector)
+                    for elem in elements:
+                        if elem.is_displayed():
+                            elem.click()
+                            print(f"Clicked airline filter section", file=sys.stderr)
+                            time.sleep(1)
+                            break
+                except:
+                    continue
+            
+            # 尝试点击香港快运航空选项
+            hk_express_selectors = [
+                "//span[contains(text(), '香港快运') or contains(text(), 'UO')]/ancestor::label//input",
+                "//span[contains(text(), '香港快运') or contains(text(), 'UO')]/preceding-sibling::input",
+                "//div[contains(text(), '香港快运')]",
+                "//label[contains(., '香港快运')]//input",
+            ]
+            
+            for selector in hk_express_selectors:
+                try:
+                    elements = self.driver.find_elements(By.XPATH, selector)
+                    for elem in elements:
+                        if elem.is_displayed() and not elem.is_selected():
+                            elem.click()
+                            print(f"Selected Hong Kong Express filter", file=sys.stderr)
+                            time.sleep(2)  # 等待页面刷新
+                            return True
+                except Exception as e:
+                    continue
+            
+            print("Could not find airline filter, will filter results manually", file=sys.stderr)
+            return False
+            
+        except Exception as e:
+            print(f"Error filtering by airline: {e}", file=sys.stderr)
+            return False
     
     def _extract_flight_data(self, from_city, to_city, from_code, to_code, date):
         """提取航班数据"""
@@ -642,9 +838,10 @@ def main():
     parser.add_argument('--days', type=int, default=30, help='Number of days to search')
     parser.add_argument('--headless', action='store_true', default=True, help='Run in headless mode')
     parser.add_argument('--strict-filter', action='store_true', help='Enable strict filtering (Hong Kong Airlines only, specific time)')
+    parser.add_argument('--hk-express-only', action='store_true', help='Search Hong Kong Express/UO flights only')
     parser.add_argument('--target-time', help='Target departure time (e.g., 23:55)')
     parser.add_argument('--min-departure-time', default='20:00', help='Minimum departure time for outbound flights (default: 20:00)')
-    parser.add_argument('--min-return-time', default='20:00', help='Minimum departure time for return flights (default: 20:00)')
+    parser.add_argument('--min-return-time', default='20:00', help='Minimum departure time for return flights (default: 20:00')
     
     args = parser.parse_args()
     
@@ -680,6 +877,11 @@ def main():
         min_departure_time=args.min_departure_time,
         min_return_time=args.min_return_time
     )
+    
+    # 如果只搜索香港快运航空，设置航空公司筛选
+    if args.hk_express_only:
+        crawler.allowed_airlines = ['香港快运航空', 'Hong Kong Express', 'UO']
+        print("Searching Hong Kong Express flights only", file=sys.stderr)
     
     # 返程出发机场（默认和去程目的地相同）
     return_from_code = args.return_from_code or args.to_code

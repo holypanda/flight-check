@@ -707,3 +707,196 @@ footer {
         height: 400px;
     }
 }
+
+/* ============================================
+   移动端响应式适配
+   ============================================ */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .container {
+        padding: 15px;
+        max-width: 100%;
+    }
+    
+    /* Header 适配 */
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    h1 {
+        font-size: 1.3em;
+    }
+    
+    header p {
+        font-size: 0.85em;
+    }
+    
+    /* 配置区域适配 */
+    .config-section {
+        padding: 15px;
+    }
+    
+    .filter-info {
+        font-size: 0.8em;
+        padding: 8px;
+    }
+    
+    .filter-info span {
+        display: inline-block;
+        margin: 2px 0;
+    }
+    
+    .input-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .input-group span {
+        font-size: 0.9em;
+    }
+    
+    button {
+        width: 100%;
+        padding: 12px;
+        font-size: 1em;
+    }
+    
+    /* 图表适配 */
+    .chart-container {
+        height: 250px;
+        padding: 10px;
+    }
+    
+    h2 {
+        font-size: 1.1em;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    
+    /* 表格改为卡片式布局 */
+    .table-container {
+        overflow-x: hidden;
+    }
+    
+    table {
+        font-size: 0.85em;
+    }
+    
+    th, td {
+        padding: 6px 8px;
+    }
+    
+    /* 隐藏部分列，简化显示 */
+    #prices-table th:nth-child(1),
+    #prices-table td:nth-child(1) {
+        /* 路线列 */
+        max-width: 60px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    /* 航班信息换行 */
+    .flight-line {
+        font-size: 0.85em;
+        line-height: 1.4;
+        margin: 2px 0;
+    }
+    
+    /* 价格列突出显示 */
+    .col-price {
+        font-size: 1.1em;
+    }
+    
+    /* 天气列简化 */
+    .weather-info {
+        padding: 3px;
+    }
+    
+    .weather-main {
+        font-size: 0.9em;
+    }
+    
+    .weather-icon {
+        font-size: 1.2em;
+    }
+    
+    .weather-desc {
+        font-size: 0.75em;
+    }
+    
+    /* 按钮大小调整 */
+    .copy-btn {
+        padding: 5px 8px;
+        font-size: 0.75em;
+    }
+    
+    /* History Log 适配 */
+    #history-list li {
+        padding: 8px 10px;
+        font-size: 0.85em;
+    }
+    
+    /* Countdown 适配 */
+    .countdown {
+        display: inline-block;
+        margin-left: 0;
+        margin-top: 5px;
+        font-size: 0.8em;
+    }
+}
+
+/* 超小屏幕适配 */
+@media screen and (max-width: 480px) {
+    body {
+        padding: 5px;
+        font-size: 13px;
+    }
+    
+    .container {
+        padding: 10px;
+        border-radius: 6px;
+    }
+    
+    h1 {
+        font-size: 1.15em;
+    }
+    
+    .chart-container {
+        height: 200px;
+        padding: 5px;
+    }
+    
+    /* 表格横向滚动 */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+        min-width: 600px;
+        font-size: 0.8em;
+    }
+    
+    th, td {
+        padding: 5px 6px;
+    }
+    
+    .flight-line {
+        font-size: 0.8em;
+    }
+    
+    .weather-desc {
+        display: none; /* 超小屏幕隐藏天气描述 */
+    }
+    
+    .snow-condition {
+        font-size: 0.75em;
+    }
+}
