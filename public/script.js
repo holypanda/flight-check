@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const pricesTableBody = document.querySelector('#prices-table tbody');
     const historyList = document.getElementById('history-list');
     const saveKeyBtn = document.getElementById('save-key-btn');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const refreshBtn2 = document.getElementById('refresh-btn-2');
+    const apiKeyInput = document.getElementById('api-key-input');
     const keyInputGroup = document.getElementById('key-input-group');
     const keyDisplayGroup = document.getElementById('key-display-group');
     const maskedKeySpan = document.getElementById('masked-key');
@@ -13,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let historyData = [];
     let chartInstance = null;
     let currentWeatherData = {};
+    let isRefreshing = false; // 防止重复点击标志
 
     // Helper: Show status message
     function showStatus(message, type = 'info') {
@@ -25,8 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Helper: Format currency - 人民币不显示小数点
-    const formatCurrency = (amount, currency = 'USD') => {
-        if (currency === 'CNY') {
+    const formatCurrency = (amount, currency = 'CNY') => {
+        if (currency === 'CNY' || currency === 'RMB') {
             return '¥' + Math.round(amount).toLocaleString('zh-CN');
         }
         return new Intl.NumberFormat('en-US', {
@@ -37,12 +41,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper: Format date
     const formatDate = (isoString) => {
+        if (!isoString) return '-';
         const date = new Date(isoString);
-        return date.toLocaleString();
+        return date.toLocaleString('zh-CN');
     };
+
+    // Helper: Format short date (MM-DD)
+    const formatShortDate = (d) => d ? d.substring(5) : '-';
 
     // Helper: Escape HTML for data attribute
     const escapeHtml = (text) => {
+        if (!text) return '';
         return text.replace(/&/g, '&amp;')
                    .replace(/</g, '&lt;')
                    .replace(/>/g, '&gt;')
@@ -50,37 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
                    .replace(/'/g, '&#039;');
     };
 
-    // Helper: Generate WeChat share text
-    const generateShareText = (flight, fromAirport, toAirport, returnFromAirport, isMixed, priceDisplay) => {
-        const formatShortDate = (d) => d ? d.substring(5) : '-';
-        const returnToAirport = fromAirport;
-        const dateStr = flight.returnDate ? 
-            `${formatShortDate(flight.date)} → ${formatShortDate(flight.returnDate)}` :
-            formatShortDate(flight.date);
-        
-        const routeName = isMixed ? 
-            `香港(${toAirport})→东京(${returnFromAirport})→香港` : 
-            `香港↔东京${toAirport}`;
-        
-        let text = `✈️ ${routeName} 往返机票\n`;
-        text += `📅 ${dateStr}\n`;
-        text += `🛫 去程: ${flight.flightNumber} ${fromAirport}→${toAirport} ${flight.departureTime}-${flight.arrivalTime}\n`;
-        
-        if (flight.returnFlightNumber) {
-            text += `🛬 返程: ${flight.returnFlightNumber} ${returnFromAirport}→${returnToAirport} ${flight.returnDepartureTime}-${flight.returnArrivalTime}\n`;
-        }
-        
-        text += `💰 ${priceDisplay.replace(/<[^>]*>/g, '')}\n`;
-        
-        if (flight.bookingUrl) {
-            text += `🔗 ${flight.bookingUrl}`;
-        }
-        
-        return text;
-    };
-
     // Helper: Get weather icon HTML
-    const getWeatherIcon = (weatherMain, iconCode) => {
+    const getWeatherIcon = (weatherMain) => {
         const mainEmojiMap = {
             'Clear': '☀️',
             'Clouds': '☁️',
@@ -91,109 +71,149 @@ document.addEventListener('DOMContentLoaded', () => {
             'Thunderstorm': '⛈️',
             'Unknown': '❓'
         };
-        
-        if (weatherMain && mainEmojiMap[weatherMain]) {
-            return mainEmojiMap[weatherMain];
-        }
-        
-        if (!iconCode) return '☀️';
-        const iconMap = {
-            '01d': '☀️', '01n': '🌙',
-            '02d': '⛅', '02n': '☁️',
-            '03d': '☁️', '03n': '☁️',
-            '04d': '☁️', '04n': '☁️',
-            '09d': '🌧️', '09n': '🌧️',
-            '10d': '🌦️', '10n': '🌧️',
-            '11d': '⛈️', '11n': '⛈️',
-            '13d': '❄️', '13n': '❄️',
-            '50d': '🌫️', '50n': '🌫️'
-        };
-        return iconMap[iconCode] || '☀️';
+        return mainEmojiMap[weatherMain] || '☀️';
     };
 
-    // Helper: Get snow condition emoji and color
-    const getSnowConditionDisplay = (snowCondition) => {
-        if (!snowCondition) return { emoji: '❓', color: '#999', text: '无数据' };
-        
-        const levelEmojis = ['❓', '⬜', '🟫', '🟨', '🟩', '❄️'];
-        const levelColors = ['#999', '#ccc', '#8B4513', '#FFD700', '#32CD32', '#00CED1'];
-        const levelTexts = ['无数据', '较差', '一般', '良好', '极佳', '粉雪'];
-        
-        const level = snowCondition.level || 1;
-        return {
-            emoji: levelEmojis[level] || levelEmojis[0],
-            color: levelColors[level] || levelColors[0],
-            text: snowCondition.description || levelTexts[level] || levelTexts[0]
-        };
-    };
-
-    // Helper: Format weather display for a date
+    // Helper: Format weather display
     const formatWeatherDisplay = (weather) => {
-        if (!weather) {
-            return '<span class="weather-loading">加载中...</span>';
+        if (!weather) return '-';
+        
+        const weatherMain = weather.weather?.main || 'Unknown';
+        const temp = weather.temp?.day ?? weather.temp ?? '-';
+        const icon = getWeatherIcon(weatherMain);
+        let html = `<div class="weather-info">${icon} ${temp}°C`;
+        
+        // 雪况评级
+        const snowCondition = weather.snowCondition;
+        if (snowCondition) {
+            const snowClass = getSnowRatingClass(snowCondition.level);
+            const snowEmoji = getSnowRatingEmoji(snowCondition.level);
+            html += `<br><span class="snow-rating ${snowClass}">${snowEmoji} ${snowCondition.description}</span>`;
         }
         
-        const icon = getWeatherIcon(weather.weather?.main, weather.weather?.icon);
-        const temp = weather.temp?.day !== undefined ? `${weather.temp.day}°C` : '-';
-        const desc = weather.weather?.description || '';
-        const snow = weather.snow > 0 ? `降雪 ${weather.snow}cm` : '';
-        const snowCond = getSnowConditionDisplay(weather.snowCondition);
-        
-        return `
-            <div class="weather-info">
-                <div class="weather-main">
-                    <span class="weather-icon">${icon}</span>
-                    <span class="weather-temp">${temp}</span>
-                </div>
-                <div class="weather-desc">${desc}${snow ? ' · ' + snow : ''}</div>
-                <div class="snow-condition" style="color: ${snowCond.color}; font-weight: bold;">
-                    ${snowCond.emoji} ${snowCond.text}
-                </div>
-            </div>
-        `;
+        html += '</div>';
+        return html;
     };
 
-    // Helper: Copy text to clipboard
-    const copyToClipboard = async (text, rowElement) => {
+    // Helper: Get snow rating class based on level
+    const getSnowRatingClass = (level) => {
+        const classMap = {
+            5: 'excellent',   // 极佳
+            4: 'good',        // 很好
+            3: 'fair',        // 一般
+            2: 'poor',        // 较差
+            1: 'bad'          // 很差
+        };
+        return classMap[level] || 'unknown';
+    };
+
+    // Helper: Get snow rating emoji based on level
+    const getSnowRatingEmoji = (level) => {
+        const emojiMap = {
+            5: '❄️❄️',   // 极佳
+            4: '❄️',      // 很好
+            3: '🌨️',     // 一般
+            2: '💧',      // 较差
+            1: '😞'       // 很差
+        };
+        return emojiMap[level] || '❓';
+    };
+
+    // Helper: Generate share text
+    const generateShareText = (flight) => {
+        const dateStr = `${formatShortDate(flight.date)} → ${formatShortDate(flight.returnDate)}`;
+        const fromAirport = flight.fromAirport || 'HKG';
+        const toAirport = flight.outboundAirport || 'HND';
+        const returnFromAirport = flight.returnAirport || toAirport;
+        const returnToAirport = flight.returnToAirport || fromAirport;
+
+        // 判断是否为混搭航线
+        const isMixed = flight.routeType === 'mixed' || toAirport !== returnFromAirport;
+
+        const routeLabel = flight.route || `${fromAirport}↔${toAirport}`;
+        let text;
+        if (isMixed) {
+            text = `✈️ ${routeLabel} 混搭往返机票\n`;
+        } else {
+            text = `✈️ ${routeLabel} 往返机票\n`;
+        }
+        text += `📅 ${dateStr}\n`;
+        text += `🛫 去程: ${flight.flightNumber} ${fromAirport}→${toAirport} ${flight.departureTime}-${flight.arrivalTime}\n`;
+
+        if (flight.returnFlightNumber) {
+            text += `🛬 返程: ${flight.returnFlightNumber} ${returnFromAirport}→${returnToAirport} ${flight.returnDepartureTime}-${flight.returnArrivalTime}\n`;
+        }
+
+        text += `💰 总价: ${formatCurrency(flight.price, flight.currency).replace(/<[^>]*>/g, '')}\n`;
+        const weather = currentWeatherData[flight.date];
+        const snowDesc = weather?.snowCondition?.description || '暂无数据';
+        text += `🌨️ 汤泽雪况: ${snowDesc}`;
+
+        return text;
+    };
+
+    // Helper: Copy to clipboard
+    const copyToClipboard = async (text, row) => {
+        console.log('[Copy] Attempting to copy text:', text.substring(0, 50) + '...');
+        
         try {
+            // 方法1: 使用现代 Clipboard API
             if (navigator.clipboard && window.isSecureContext) {
                 await navigator.clipboard.writeText(text);
+                showStatus('✅ 航班信息已复制到剪贴板！', 'success');
             } else {
-                const textArea = document.createElement('textarea');
-                textArea.value = text;
-                textArea.style.position = 'fixed';
-                textArea.style.left = '-9999px';
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
+                // 方法2: 降级方案 - 使用 execCommand
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                
+                const success = document.execCommand('copy');
+                document.body.removeChild(textarea);
+                
+                if (success) {
+                    showStatus('✅ 航班信息已复制到剪贴板！', 'success');
+                } else {
+                    throw new Error('execCommand copy failed');
+                }
             }
             
-            rowElement.style.backgroundColor = '#d4edda';
-            showStatus('航班信息已复制', 'info');
+            // 视觉反馈
+            row.style.backgroundColor = '#d4edda';
             setTimeout(() => {
-                rowElement.style.backgroundColor = '';
-            }, 1000);
+                row.style.backgroundColor = '';
+            }, 800);
+            
         } catch (err) {
-            console.error('Copy failed:', err);
-            showStatus('复制失败，请手动复制', 'error');
+            console.error('[Copy] Failed to copy:', err);
+            showStatus('❌ 复制失败: ' + (err.message || '请手动复制'), 'error');
+            
+            // 如果复制失败，显示文本让用户手动复制
+            console.log('[Copy] Text content:\n', text);
         }
     };
 
-    // Render Chart
-    function renderChart(snapshot) {
+    // Render chart
+    function renderChart(currentSnapshot) {
         if (chartInstance) {
             chartInstance.destroy();
         }
 
-        if (!snapshot.prices || snapshot.prices.length === 0) {
+        // 过滤有效的航班数据
+        const validPrices = (currentSnapshot.prices || []).filter(f => {
+            return f.price && f.price > 0 && f.date;
+        });
+
+        if (validPrices.length === 0) {
             return;
         }
 
-        const labels = snapshot.prices.map(p => p.date);
-        const data = snapshot.prices.map(p => p.price);
-        const currency = snapshot.prices[0]?.currency || 'CNY';
-
+        const labels = validPrices.map(f => formatShortDate(f.date));
+        const data = validPrices.map(f => f.price);
+        const currency = validPrices[0]?.currency || 'CNY';
+        
         const minPrice = Math.min(...data);
         const minPriceIndex = data.indexOf(minPrice);
 
@@ -212,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
             data: {
                 labels: labels,
                 datasets: [{
-                    label: `Price (${currency})`,
+                    label: `总价 (${currency})`,
                     data: data,
                     borderColor: '#4a90e2',
                     backgroundColor: 'rgba(74, 144, 226, 0.1)',
@@ -232,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Flight Prices by Departure Date'
+                        text: '周末航班价格趋势（周五-周日）'
                     },
                     tooltip: {
                         callbacks: {
@@ -247,13 +267,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         beginAtZero: false,
                         title: {
                             display: true,
-                            text: 'Price'
+                            text: '价格'
                         }
                     },
                     x: {
                         title: {
                             display: true,
-                            text: 'Departure Date'
+                            text: '出发日期'
                         }
                     }
                 }
@@ -266,7 +286,14 @@ document.addEventListener('DOMContentLoaded', () => {
         pricesTableBody.innerHTML = '';
 
         if (!historyData || historyData.length === 0) {
-            pricesTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;">暂无数据，请点击"更新价格"按钮获取航班信息</td></tr>';
+            pricesTableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align:center;padding:40px;color:#666;">
+                        <div style="font-size: 1.2em;margin-bottom:10px;">📭 暂无航班数据</div>
+                        <div style="font-size: 0.9em;">点击上方 <strong style="color:#27ae60;">🔄 更新价格</strong> 按钮开始搜索</div>
+                        <div style="font-size: 0.8em;color:#999;margin-top:10px;">每次搜索约消耗 30-60 API credits</div>
+                    </td>
+                </tr>`;
             return;
         }
 
@@ -279,47 +306,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderChart(currentSnapshot);
 
+        // 过滤有效的航班数据
+        const validPrices = (currentSnapshot.prices || []).filter(f => {
+            return f.price && f.price > 0 && f.flightNumber && f.returnFlightNumber;
+        });
+
+        if (validPrices.length === 0) {
+            pricesTableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align:center;padding:40px;color:#666;">
+                        <div style="font-size: 1.2em;margin-bottom:10px;">⚠️ 数据不完整</div>
+                        <div style="font-size: 0.9em;">请重新点击 <strong style="color:#27ae60;">🔄 更新价格</strong> 按钮搜索</div>
+                    </td>
+                </tr>`;
+            return;
+        }
+
         // Find the cheapest flight
-        const cheapestFlight = currentSnapshot.prices.reduce((min, flight) => 
-            flight.price < min.price ? flight : min, currentSnapshot.prices[0]
+        const cheapestFlight = validPrices.reduce((min, flight) => 
+            flight.price < min.price ? flight : min, validPrices[0]
         );
 
-        currentSnapshot.prices.forEach((flight, index) => {
+        validPrices.forEach((flight, index) => {
             const row = document.createElement('tr');
 
-            const fromAirport = 'HKG';
-            const toAirport = flight.outboundAirport || flight.toAirport || 'HND';
-            const returnFromAirport = flight.returnAirport || flight.returnFromAirport || toAirport;
-            const returnToAirport = 'HKG';
-            
-            const isMixed = flight.mixedAirports || (returnFromAirport !== toAirport);
-            
-            const formatShortDate = (d) => d ? d.substring(5) : '-';
-            const dateDisplay = flight.returnDate ?
-                `${formatShortDate(flight.date)} ↓ ${formatShortDate(flight.returnDate)}` :
-                formatShortDate(flight.date);
+            const fromAirport = flight.fromAirport || 'HKG';
+            const toAirport = flight.outboundAirport || 'HND';
+            const returnFromAirport = flight.returnAirport || toAirport;
+            const returnToAirport = flight.returnToAirport || fromAirport;
 
-            const outboundStr = `${flight.flightNumber || '-'} ${fromAirport}→${toAirport} ${flight.departureTime || '-'}→${flight.arrivalTime || '-'}`;
-            const returnStr = flight.returnFlightNumber ? 
-                `${flight.returnFlightNumber} ${returnFromAirport}→${returnToAirport} ${flight.returnDepartureTime || '-'}→${flight.returnArrivalTime || '-'}` : 
+            // 判断是否为混搭航线
+            const isMixed = flight.routeType === 'mixed' || toAirport !== returnFromAirport;
+
+            const dateDisplay = `${formatShortDate(flight.date)} ↓ ${formatShortDate(flight.returnDate)}`;
+
+            const outboundStr = `${flight.flightNumber || '-'} ${fromAirport}→${toAirport} ${flight.departureTime || '-'}`;
+            const returnStr = flight.returnFlightNumber ?
+                `${flight.returnFlightNumber} ${returnFromAirport}→${returnToAirport} ${flight.returnDepartureTime || '-'}` :
                 '-';
-            
+
             const flightInfoDisplay = `
                 <div class="flight-line">🛫 ${outboundStr}</div>
                 <div class="flight-line">🛬 ${returnStr}</div>
             `;
 
+            // 路线显示
+            const toName = flight.outboundAirportName || toAirport;
+            const fromName = flight.fromAirportName || fromAirport;
             let routeDisplay;
             if (isMixed) {
-                routeDisplay = `<strong>${fromAirport}-${toAirport}</strong><span class="mixed-badge" title="去程${toAirport}，返程${returnFromAirport}">🔄</span>`;
+                const returnName = flight.returnAirportName || returnFromAirport;
+                routeDisplay = `<strong>${fromName}→${toName}</strong><br><small style="color:#666;">/${returnName}→${fromName}</small>`;
             } else {
-                routeDisplay = `<strong>${fromAirport}-${toAirport}</strong>`;
+                routeDisplay = `<strong>${fromName}↔${toName}</strong>`;
             }
 
             const priceDisplay = formatCurrency(flight.price, flight.currency);
 
-            const priceText = flight.price ? `¥${flight.price}` : '-';
-            const shareText = generateShareText(flight, fromAirport, toAirport, returnFromAirport, isMixed, priceText);
+            const shareText = generateShareText(flight);
 
             if (flight === cheapestFlight) {
                 row.classList.add('cheapest');
@@ -331,15 +375,41 @@ document.addEventListener('DOMContentLoaded', () => {
             const weather = currentWeatherData[flight.date];
             const weatherDisplay = formatWeatherDisplay(weather);
 
+            // 购票链接（先不设置onclick，后面用JS绑定）
+            const hasBookingUrl = !!flight.bookingUrl;
+
             row.innerHTML = `
                 <td class="col-route">${routeDisplay}</td>
                 <td class="col-date">${dateDisplay}</td>
                 <td class="col-flight">${flightInfoDisplay}</td>
                 <td class="col-price">${priceDisplay}</td>
                 <td class="col-weather">${weatherDisplay}</td>
+                <td class="col-booking">
+                    ${hasBookingUrl ? `<a href="${escapeHtml(flight.bookingUrl)}" target="_blank" class="booking-link js-booking-link" title="在 Skyscanner 上预订">🛒 预订</a>` : '<span style="color:#999;font-size:0.85em;">-</span>'}
+                </td>
             `;
 
-            row.addEventListener('click', () => copyToClipboard(shareText, row));
+            // 绑定行点击事件（复制功能）
+            row.addEventListener('click', (e) => {
+                console.log('[Click] Row clicked, target:', e.target.tagName, e.target.className);
+                
+                // 如果点击的是购票链接，不触发复制
+                if (e.target.closest('.js-booking-link')) {
+                    console.log('[Click] Clicked on booking link, skipping copy');
+                    return;
+                }
+                
+                console.log('[Click] Triggering copy');
+                copyToClipboard(shareText, row);
+            });
+
+            // 为购票链接单独绑定点击事件，阻止冒泡
+            const bookingLink = row.querySelector('.js-booking-link');
+            if (bookingLink) {
+                bookingLink.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
             pricesTableBody.appendChild(row);
         });
 
@@ -362,7 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
             li.style.alignItems = 'center';
 
             const span = document.createElement('span');
-            span.textContent = `Snapshot: ${formatDate(snapshot.timestamp)}`;
+            span.textContent = `记录: ${formatDate(snapshot.timestamp)}`;
             span.style.cursor = 'pointer';
             span.style.flexGrow = '1';
 
@@ -380,11 +450,11 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteBtn.style.background = 'none';
             deleteBtn.style.cursor = 'pointer';
             deleteBtn.style.fontSize = '1.2em';
-            deleteBtn.title = 'Delete Snapshot';
+            deleteBtn.title = '删除记录';
 
             deleteBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                if (confirm('Are you sure you want to delete this snapshot?')) {
+                if (confirm('确定要删除这条记录吗？')) {
                     deleteSnapshot(snapshot.id);
                 }
             });
@@ -403,87 +473,62 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                showStatus('Snapshot deleted successfully', 'info');
-                fetchData();
+                showStatus('记录已删除', 'success');
+                await loadPrices();
             } else {
-                throw new Error('Failed to delete snapshot');
+                showStatus('删除失败', 'error');
             }
         } catch (error) {
             console.error('Error deleting snapshot:', error);
-            showStatus('Error deleting snapshot', 'error');
+            showStatus('删除失败', 'error');
         }
     }
 
-    // Fetch data from API
-    async function fetchData() {
+    // Load prices from server
+    async function loadPrices() {
         try {
             const response = await fetch('/api/prices');
-            if (!response.ok) throw new Error('Network response was not ok');
-
+            if (!response.ok) throw new Error('Failed to load prices');
+            
             historyData = await response.json();
-
+            
             if (historyData.length > 0) {
-                const latestSnapshot = historyData[historyData.length - 1];
-                currentWeatherData = latestSnapshot.weather || {};
-                
-                renderHistoryList();
                 renderTable(historyData.length - 1);
+                renderHistoryList();
             } else {
-                showStatus('No price history found.', 'info');
+                // 清空所有显示
+                pricesTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align:center;padding:40px;color:#666;">
+                            <div style="font-size: 1.2em;margin-bottom:10px;">📭 暂无航班数据</div>
+                            <div style="font-size: 0.9em;">点击上方 <strong style="color:#27ae60;">🔄 更新价格</strong> 按钮开始搜索</div>
+                        </td>
+                    </tr>`;
+                historyList.innerHTML = '';
+                lastUpdatedSpan.textContent = '-';
+                if (chartInstance) {
+                    chartInstance.destroy();
+                    chartInstance = null;
+                }
             }
         } catch (error) {
-            console.error('Error fetching data:', error);
-            showStatus('Failed to load price data.', 'error');
+            console.error('Error loading prices:', error);
+            showStatus('加载数据失败', 'error');
         }
     }
 
-    // Restart crawler handler
-    saveKeyBtn.addEventListener('click', async () => {
-        saveKeyBtn.disabled = true;
-        saveKeyBtn.textContent = '爬取中...';
-
-        try {
-            const response = await fetch('/api/restart-crawler', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            const result = await response.json();
-
-            if (!response.ok) {
-                throw new Error(result.error || 'Failed to restart crawler');
-            }
-
-            showStatus('价格已更新!', 'info');
-            await fetchData();
-            checkConfig();
-        } catch (error) {
-            console.error('Error restarting crawler:', error);
-            showStatus(error.message, 'error');
-        } finally {
-            saveKeyBtn.disabled = false;
-            saveKeyBtn.textContent = '更新价格';
-        }
-    });
-
-    // Check if crawler is enabled
+    // Check config status
     async function checkConfig() {
         try {
             const response = await fetch('/api/config');
-            const data = await response.json();
-
-            if (data.hasApiKey) {
+            const config = await response.json();
+            
+            if (config.hasApiKey) {
                 keyInputGroup.style.display = 'none';
                 keyDisplayGroup.style.display = 'flex';
-                keyDisplayGroup.style.alignItems = 'center';
-                keyDisplayGroup.style.gap = '10px';
-                maskedKeySpan.textContent = '运行中';
+                maskedKeySpan.textContent = config.maskedKey || '已配置';
             } else {
-                keyInputGroup.style.display = 'flex';
-                keyInputGroup.style.alignItems = 'center';
-                keyInputGroup.style.gap = '10px';
+                keyInputGroup.style.display = 'block';
                 keyDisplayGroup.style.display = 'none';
             }
         } catch (error) {
@@ -491,45 +536,190 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Disable crawler handler
-    removeKeyBtn.addEventListener('click', async () => {
-        if (!confirm('Are you sure you want to disable the crawler?')) {
+    // 请求通知权限
+    function requestNotificationPermission() {
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    }
+
+    // 发送桌面通知
+    function sendNotification(title, body, icon = '✈️') {
+        // 浏览器通知
+        if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification(title, {
+                body: body,
+                icon: icon,
+                badge: icon,
+                tag: 'flight-check-complete'
+            });
+        }
+        
+        // 同时播放提示音（可选）
+        try {
+            const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZURE');
+            audio.volume = 0.3;
+            audio.play().catch(() => {});
+        } catch (e) {}
+    }
+
+    // 设置刷新按钮状态
+    function setRefreshButtonsState(disabled) {
+        const buttons = [refreshBtn, refreshBtn2].filter(Boolean);
+        buttons.forEach(btn => {
+            btn.disabled = disabled;
+            if (disabled) {
+                btn.dataset.originalText = btn.innerHTML;
+                btn.innerHTML = '⏳ 搜索中...';
+                btn.style.opacity = '0.6';
+                btn.style.cursor = 'not-allowed';
+            } else {
+                btn.innerHTML = btn.dataset.originalText || '🔄 更新价格';
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            }
+        });
+    }
+
+    // Refresh prices
+    async function refreshPrices() {
+        // 防止重复点击
+        if (isRefreshing) {
+            showStatus('正在搜索中，请稍候...', 'info');
             return;
         }
 
-        try {
-            const response = await fetch('/api/config', { method: 'DELETE' });
-            if (response.ok) {
-                showStatus('Crawler disabled', 'info');
-                checkConfig();
-            } else {
-                throw new Error('Failed to disable crawler');
-            }
-        } catch (error) {
-            console.error('Error disabling crawler:', error);
-            showStatus('Error disabling crawler', 'error');
-        }
-    });
+        isRefreshing = true;
+        setRefreshButtonsState(true);
+        
+        // 请求通知权限（首次点击时）
+        requestNotificationPermission();
 
-    // Countdown timer for next update
-    function updateCountdown() {
-        const now = new Date();
-        const nextHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1, 0, 0);
-        const diff = nextHour - now;
+        try {
+            showStatus('正在搜索航班，请稍候...', 'info');
+            
+            const monthsSelect = document.getElementById('months-select');
+            const months = monthsSelect ? parseInt(monthsSelect.value, 10) : 1;
+            const routeSelect = document.getElementById('route-select');
+            const route = routeSelect ? routeSelect.value : 'hkg-tokyo';
+            const airlineSelect = document.getElementById('airline-select');
+            const airline = airlineSelect ? airlineSelect.value : undefined;
+
+            const body = { months, route };
+            if (airline !== undefined) body.airline = airline || null;
+
+            const response = await fetch('/api/refresh', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to refresh');
+            }
+
+            const result = await response.json();
+            
+            // 搜索完成，显示成功消息
+            showStatus('✅ 航班搜索完成！', 'success');
+            
+            // 发送桌面通知
+            const flightCount = result.count || 0;
+            const minPrice = result.minPrice ? `最低 ¥${result.minPrice}` : '';
+            sendNotification(
+                '✈️ 航班搜索完成',
+                `找到 ${flightCount} 个周末航班选项${minPrice ? '，' + minPrice : ''}，点击查看详情`
+            );
+            
+            // 重新加载数据
+            await loadPrices();
+            
+        } catch (error) {
+            console.error('Error refreshing prices:', error);
+            showStatus(error.message || '搜索失败', 'error');
+            
+            // 错误通知
+            sendNotification(
+                '❌ 搜索失败',
+                error.message || '请检查 API Key 或网络连接'
+            );
+        } finally {
+            // 恢复按钮状态
+            isRefreshing = false;
+            setRefreshButtonsState(false);
+        }
+    }
+
+    // Save API Key
+    async function saveApiKey() {
+        const apiKey = apiKeyInput?.value?.trim();
+        if (!apiKey) {
+            showStatus('请输入 API Key', 'error');
+            return;
+        }
         
-        const minutes = Math.floor(diff / 60000);
-        const seconds = Math.floor((diff % 60000) / 1000);
-        
-        const countdownEl = document.getElementById('countdown');
-        if (countdownEl) {
-            countdownEl.textContent = `(下次更新: ${minutes}分${seconds.toString().padStart(2, '0')}秒后)`;
+        try {
+            showStatus('正在验证 API Key...', 'info');
+            const response = await fetch('/api/config', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ apiKey })
+            });
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || '保存失败');
+            }
+            
+            const result = await response.json();
+            showStatus(result.message, 'success');
+            apiKeyInput.value = '';
+            await checkConfig();
+        } catch (error) {
+            console.error('Error saving API key:', error);
+            showStatus(error.message || '保存失败', 'error');
         }
     }
     
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+    // Event listeners
+    if (saveKeyBtn) {
+        saveKeyBtn.addEventListener('click', saveApiKey);
+    }
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', refreshPrices);
+    }
+    if (refreshBtn2) {
+        refreshBtn2.addEventListener('click', refreshPrices);
+    }
+    
+    // Route selector: update airline dropdown on change
+    const routeSelect = document.getElementById('route-select');
+    const airlineSelect = document.getElementById('airline-select');
+    if (routeSelect && airlineSelect) {
+        routeSelect.addEventListener('change', () => {
+            if (routeSelect.value === 'pek-hkg') {
+                // 北京航线不限航司，锁定
+                airlineSelect.value = '';
+                airlineSelect.disabled = true;
+            } else {
+                airlineSelect.disabled = false;
+            }
+        });
+    }
 
-    // Initial load
+    removeKeyBtn.addEventListener('click', async () => {
+        try {
+            await fetch('/api/config', { method: 'DELETE' });
+            keyInputGroup.style.display = 'block';
+            keyDisplayGroup.style.display = 'none';
+            showStatus('配置已移除', 'success');
+        } catch (error) {
+            showStatus('移除失败', 'error');
+        }
+    });
+
+    // Initialize
     checkConfig();
-    fetchData();
+    loadPrices();
 });

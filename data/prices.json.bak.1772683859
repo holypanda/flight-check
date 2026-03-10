@@ -1,0 +1,1589 @@
+[
+  {
+    "timestamp": "2026-03-04T17:06:19.511Z",
+    "prices": [
+      {
+        "date": "2026-03-08"
+      },
+      {
+        "date": "2026-03-15"
+      },
+      {
+        "date": "2026-03-22"
+      }
+    ],
+    "weather": {
+      "2026-03-08": {
+        "date": "2026-03-08",
+        "temp": {
+          "day": -1,
+          "min": -3,
+          "max": 0
+        },
+        "weather": {
+          "main": "Snow",
+          "description": "阵雪",
+          "icon": "13d"
+        },
+        "snow": 0.6,
+        "precipitation": 5.8,
+        "snowCondition": {
+          "score": 60,
+          "level": 3,
+          "condition": "excellent",
+          "description": "微量雪 - 极佳",
+          "isSnowing": true
+        }
+      },
+      "2026-03-15": {
+        "date": "2026-03-15",
+        "temp": {
+          "day": 4,
+          "min": -2,
+          "max": 10
+        },
+        "weather": {
+          "main": "Clouds",
+          "description": "阴天",
+          "icon": "04d"
+        },
+        "snow": 0,
+        "precipitation": 0,
+        "snowCondition": {
+          "score": 15,
+          "level": 1,
+          "condition": "fair",
+          "description": "一般",
+          "isSnowing": false
+        }
+      }
+    },
+    "id": "mmcaggehocd65iuid3g"
+  },
+  {
+    "timestamp": "2026-03-05T01:39:48.851Z",
+    "prices": [],
+    "error": "Failed to parse crawler output: Expected ',' or '}' after property value in JSON at position 130 (line 1 column 131)",
+    "weather": {},
+    "id": "mmcsst110ng2fv7a286q"
+  },
+  {
+    "prices": [],
+    "timestamp": "2026-03-05T03:09:55.107Z",
+    "weather": {},
+    "id": "mmcw0oisd383m9m6ez7"
+  },
+  {
+    "prices": [
+      {
+        "route": "HKG-HND",
+        "date": "2026-04-03",
+        "returnDate": "2026-04-05",
+        "price": 4114,
+        "currency": "CNY",
+        "outboundAirport": "HND",
+        "flightNumber": "UO628",
+        "departureTime": "20:00",
+        "arrivalTime": "01:20",
+        "returnAirport": "HND",
+        "returnFlightNumber": "UO625",
+        "returnDepartureTime": "06:35",
+        "returnArrivalTime": "10:15",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "4h 20m",
+        "returnDuration": "4h 40m",
+        "stops": 0,
+        "returnStops": 0,
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO628",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "20:00",
+            "date": "2026-04-03",
+            "datetime": "2026-04-03T20:00:00"
+          },
+          "arrival": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "01:20",
+            "date": "2026-04-04",
+            "datetime": "2026-04-04T01:20:00"
+          },
+          "duration": "4h 20m",
+          "durationMinutes": 260,
+          "stops": 0,
+          "price": 3104,
+          "currency": "CNY",
+          "cabinClass": "Economy"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO625",
+          "aircraft": "",
+          "departure": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "06:35",
+            "date": "2026-04-05",
+            "datetime": "2026-04-05T06:35:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "10:15",
+            "date": "2026-04-05",
+            "datetime": "2026-04-05T10:15:00"
+          },
+          "duration": "4h 40m",
+          "durationMinutes": 280,
+          "stops": 0,
+          "price": 1010,
+          "currency": "CNY",
+          "cabinClass": "Economy"
+        }
+      },
+      {
+        "route": "HKG-HND",
+        "date": "2026-04-24",
+        "returnDate": "2026-04-26",
+        "price": 1906,
+        "currency": "CNY",
+        "outboundAirport": "HND",
+        "flightNumber": "UO628",
+        "departureTime": "20:00",
+        "arrivalTime": "01:20",
+        "returnAirport": "HND",
+        "returnFlightNumber": "UO625",
+        "returnDepartureTime": "06:35",
+        "returnArrivalTime": "10:15",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "4h 20m",
+        "returnDuration": "4h 40m",
+        "stops": 0,
+        "returnStops": 0,
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO628",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "20:00",
+            "date": "2026-04-24",
+            "datetime": "2026-04-24T20:00:00"
+          },
+          "arrival": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "01:20",
+            "date": "2026-04-25",
+            "datetime": "2026-04-25T01:20:00"
+          },
+          "duration": "4h 20m",
+          "durationMinutes": 260,
+          "stops": 0,
+          "price": 892,
+          "currency": "CNY",
+          "cabinClass": "Economy"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO625",
+          "aircraft": "",
+          "departure": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "06:35",
+            "date": "2026-04-26",
+            "datetime": "2026-04-26T06:35:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "10:15",
+            "date": "2026-04-26",
+            "datetime": "2026-04-26T10:15:00"
+          },
+          "duration": "4h 40m",
+          "durationMinutes": 280,
+          "stops": 0,
+          "price": 1014,
+          "currency": "CNY",
+          "cabinClass": "Economy"
+        }
+      },
+      {
+        "route": "HKG-HND",
+        "date": "2026-05-08",
+        "returnDate": "2026-05-10",
+        "price": 1779,
+        "currency": "CNY",
+        "outboundAirport": "HND",
+        "flightNumber": "UO628",
+        "departureTime": "20:00",
+        "arrivalTime": "01:20",
+        "returnAirport": "HND",
+        "returnFlightNumber": "UO625",
+        "returnDepartureTime": "06:35",
+        "returnArrivalTime": "10:15",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "4h 20m",
+        "returnDuration": "4h 40m",
+        "stops": 0,
+        "returnStops": 0,
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO628",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "20:00",
+            "date": "2026-05-08",
+            "datetime": "2026-05-08T20:00:00"
+          },
+          "arrival": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "01:20",
+            "date": "2026-05-09",
+            "datetime": "2026-05-09T01:20:00"
+          },
+          "duration": "4h 20m",
+          "durationMinutes": 260,
+          "stops": 0,
+          "price": 917,
+          "currency": "CNY",
+          "cabinClass": "Economy"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO625",
+          "aircraft": "",
+          "departure": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "06:35",
+            "date": "2026-05-10",
+            "datetime": "2026-05-10T06:35:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "10:15",
+            "date": "2026-05-10",
+            "datetime": "2026-05-10T10:15:00"
+          },
+          "duration": "4h 40m",
+          "durationMinutes": 280,
+          "stops": 0,
+          "price": 862,
+          "currency": "CNY",
+          "cabinClass": "Economy"
+        }
+      },
+      {
+        "route": "HKG-HND",
+        "date": "2026-05-15",
+        "returnDate": "2026-05-17",
+        "price": 1911,
+        "currency": "CNY",
+        "outboundAirport": "HND",
+        "flightNumber": "UO628",
+        "departureTime": "20:00",
+        "arrivalTime": "01:20",
+        "returnAirport": "HND",
+        "returnFlightNumber": "UO625",
+        "returnDepartureTime": "06:35",
+        "returnArrivalTime": "10:15",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "4h 20m",
+        "returnDuration": "4h 40m",
+        "stops": 0,
+        "returnStops": 0,
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO628",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "20:00",
+            "date": "2026-05-15",
+            "datetime": "2026-05-15T20:00:00"
+          },
+          "arrival": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "01:20",
+            "date": "2026-05-16",
+            "datetime": "2026-05-16T01:20:00"
+          },
+          "duration": "4h 20m",
+          "durationMinutes": 260,
+          "stops": 0,
+          "price": 897,
+          "currency": "CNY",
+          "cabinClass": "Economy"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO625",
+          "aircraft": "",
+          "departure": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "06:35",
+            "date": "2026-05-17",
+            "datetime": "2026-05-17T06:35:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "10:15",
+            "date": "2026-05-17",
+            "datetime": "2026-05-17T10:15:00"
+          },
+          "duration": "4h 40m",
+          "durationMinutes": 280,
+          "stops": 0,
+          "price": 1014,
+          "currency": "CNY",
+          "cabinClass": "Economy"
+        }
+      }
+    ],
+    "timestamp": "2026-03-05T03:12:59.416Z",
+    "weather": {},
+    "id": "mmcw4navn51qi85f1ll"
+  },
+  {
+    "prices": [
+      {
+        "route": "HKG-HND",
+        "date": "2026-03-20",
+        "returnDate": "2026-03-22",
+        "price": 4805,
+        "currency": "CNY",
+        "outboundAirport": "HND",
+        "flightNumber": "UO624",
+        "departureTime": "23:55",
+        "arrivalTime": "04:45",
+        "returnAirport": "HND",
+        "returnFlightNumber": "UO623",
+        "returnDepartureTime": "23:55",
+        "returnArrivalTime": "04:15",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "3h 50m",
+        "returnDuration": "5h 20m",
+        "stops": 0,
+        "returnStops": 0,
+        "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/edus/1/12191.12234.2026-03-20/air/trava/flights?itinerary=flight|-32228|624|12191|2026-03-20T23:55|12234|2026-03-21T04:45|230|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=87d7783d-adee-4e9d-9d42-c14d964a5a39&ticket_price=3600.78&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mJJTSktFmLmmB8vxcxxKl6hYc6ns2xGTAqMAGQKTmwcAAAA|1131449055158597176|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:43&pqid=true&fare_type=base_fare",
+        "outboundBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/edus/1/12191.12234.2026-03-20/air/trava/flights?itinerary=flight|-32228|624|12191|2026-03-20T23:55|12234|2026-03-21T04:45|230|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=87d7783d-adee-4e9d-9d42-c14d964a5a39&ticket_price=3600.78&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mJJTSktFmLmmB8vxcxxKl6hYc6ns2xGTAqMAGQKTmwcAAAA|1131449055158597176|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:43&pqid=true&fare_type=base_fare",
+        "returnBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/vaya/1/12234.12191.2026-03-22/air/trava/flights?itinerary=flight|-32228|623|12234|2026-03-22T23:55|12191|2026-03-23T04:15|320|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=ef54c08d-f5b4-4a72-a7a8-9ccecffe7fb9&ticket_price=1204.47&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52IpS6xMFGLmOBUvxcwxP16h4dGfs2xGTAqMVczOfpEAZt2kXiEAAAA|9174660025708891102|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:40&pqid=true&fare_type=base_fare",
+        "agentName": "edus",
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO624",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "23:55",
+            "date": "2026-03-20",
+            "datetime": "2026-03-20T23:55:00"
+          },
+          "arrival": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "04:45",
+            "date": "2026-03-21",
+            "datetime": "2026-03-21T04:45:00"
+          },
+          "duration": "3h 50m",
+          "durationMinutes": 230,
+          "stops": 0,
+          "price": 3601,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/edus/1/12191.12234.2026-03-20/air/trava/flights?itinerary=flight|-32228|624|12191|2026-03-20T23:55|12234|2026-03-21T04:45|230|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=87d7783d-adee-4e9d-9d42-c14d964a5a39&ticket_price=3600.78&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mJJTSktFmLmmB8vxcxxKl6hYc6ns2xGTAqMAGQKTmwcAAAA|1131449055158597176|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:43&pqid=true&fare_type=base_fare",
+          "agentName": "edus"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO623",
+          "aircraft": "",
+          "departure": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "23:55",
+            "date": "2026-03-22",
+            "datetime": "2026-03-22T23:55:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "04:15",
+            "date": "2026-03-23",
+            "datetime": "2026-03-23T04:15:00"
+          },
+          "duration": "5h 20m",
+          "durationMinutes": 320,
+          "stops": 0,
+          "price": 1204,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/vaya/1/12234.12191.2026-03-22/air/trava/flights?itinerary=flight|-32228|623|12234|2026-03-22T23:55|12191|2026-03-23T04:15|320|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=ef54c08d-f5b4-4a72-a7a8-9ccecffe7fb9&ticket_price=1204.47&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52IpS6xMFGLmOBUvxcwxP16h4dGfs2xGTAqMVczOfpEAZt2kXiEAAAA|9174660025708891102|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:40&pqid=true&fare_type=base_fare",
+          "agentName": "vaya"
+        }
+      },
+      {
+        "route": "HKG-NRT",
+        "date": "2026-03-27",
+        "returnDate": "2026-03-29",
+        "price": 3084,
+        "currency": "CNY",
+        "outboundAirport": "NRT",
+        "flightNumber": "UO542",
+        "departureTime": "20:05",
+        "arrivalTime": "14:30",
+        "returnAirport": "NRT",
+        "returnFlightNumber": "UO651",
+        "returnDepartureTime": "20:40",
+        "returnArrivalTime": "00:35",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "17h 25m",
+        "returnDuration": "4h 55m",
+        "stops": 2,
+        "returnStops": 0,
+        "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/gtus/1/12191.14788.2026-03-27/air/trava/flights?itinerary=flight|-32228|542|12191|2026-03-27T20:05|12071|2026-03-27T21:10|125|-|-|-;flight|-32659|987|12071|2026-03-28T01:10|14008|2026-03-28T03:45|95|-|-|-;flight|-32659|862|14008|2026-03-28T09:30|14788|2026-03-28T14:30|240|-|-|-&carriers=-32228,-32659&operators=-32228;-32659;-32659&passengers=1&channel=website&cabin_class=economy&fps_session_id=2863d9e3-450e-462a-b792-89807dd13df3&ticket_price=2041.94&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52JJLyktFmLmmB8vxcxxpFihYeL0c2xGTAqMVczOfpEAC5whGyEAAAA|469995356928996067|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:49&transfer_protection=protected&pqid=true&fare_type=base_fare",
+        "outboundBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/gtus/1/12191.14788.2026-03-27/air/trava/flights?itinerary=flight|-32228|542|12191|2026-03-27T20:05|12071|2026-03-27T21:10|125|-|-|-;flight|-32659|987|12071|2026-03-28T01:10|14008|2026-03-28T03:45|95|-|-|-;flight|-32659|862|14008|2026-03-28T09:30|14788|2026-03-28T14:30|240|-|-|-&carriers=-32228,-32659&operators=-32228;-32659;-32659&passengers=1&channel=website&cabin_class=economy&fps_session_id=2863d9e3-450e-462a-b792-89807dd13df3&ticket_price=2041.94&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52JJLyktFmLmmB8vxcxxpFihYeL0c2xGTAqMVczOfpEAC5whGyEAAAA|469995356928996067|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:49&transfer_protection=protected&pqid=true&fare_type=base_fare",
+        "returnBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/skyp/1/14788.12191.2026-03-29/air/trava/flights?itinerary=flight|-32228|651|14788|2026-03-29T20:40|12191|2026-03-30T00:35|295|-|O|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=d879ba8f-28cb-4e28-aa2a-f14f145cccd7&ticket_price=1041.58&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mIpzq4sEGLmOFIsxcwxP16h4frCc2xGTAqMAGf54kAcAAAA|7823943681302618784|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T02:54:41&pqid=true&fare_type=base_fare",
+        "agentName": "gtus",
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO542",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "20:05",
+            "date": "2026-03-27",
+            "datetime": "2026-03-27T20:05:00"
+          },
+          "arrival": {
+            "airport": "NRT",
+            "airportName": "Tokyo Narita",
+            "terminal": "",
+            "time": "14:30",
+            "date": "2026-03-28",
+            "datetime": "2026-03-28T14:30:00"
+          },
+          "duration": "17h 25m",
+          "durationMinutes": 1045,
+          "stops": 2,
+          "price": 2042,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/gtus/1/12191.14788.2026-03-27/air/trava/flights?itinerary=flight|-32228|542|12191|2026-03-27T20:05|12071|2026-03-27T21:10|125|-|-|-;flight|-32659|987|12071|2026-03-28T01:10|14008|2026-03-28T03:45|95|-|-|-;flight|-32659|862|14008|2026-03-28T09:30|14788|2026-03-28T14:30|240|-|-|-&carriers=-32228,-32659&operators=-32228;-32659;-32659&passengers=1&channel=website&cabin_class=economy&fps_session_id=2863d9e3-450e-462a-b792-89807dd13df3&ticket_price=2041.94&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52JJLyktFmLmmB8vxcxxpFihYeL0c2xGTAqMVczOfpEAC5whGyEAAAA|469995356928996067|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:49&transfer_protection=protected&pqid=true&fare_type=base_fare",
+          "agentName": "gtus"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO651",
+          "aircraft": "",
+          "departure": {
+            "airport": "NRT",
+            "airportName": "Tokyo Narita",
+            "terminal": "",
+            "time": "20:40",
+            "date": "2026-03-29",
+            "datetime": "2026-03-29T20:40:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "00:35",
+            "date": "2026-03-30",
+            "datetime": "2026-03-30T00:35:00"
+          },
+          "duration": "4h 55m",
+          "durationMinutes": 295,
+          "stops": 0,
+          "price": 1042,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/skyp/1/14788.12191.2026-03-29/air/trava/flights?itinerary=flight|-32228|651|14788|2026-03-29T20:40|12191|2026-03-30T00:35|295|-|O|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=d879ba8f-28cb-4e28-aa2a-f14f145cccd7&ticket_price=1041.58&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mIpzq4sEGLmOFIsxcwxP16h4frCc2xGTAqMAGf54kAcAAAA|7823943681302618784|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T02:54:41&pqid=true&fare_type=base_fare",
+          "agentName": "skyp"
+        }
+      }
+    ],
+    "timestamp": "2026-03-05T03:39:54.144Z",
+    "weather": {
+      "2026-03-20": {
+        "date": "2026-03-20",
+        "temp": {
+          "day": 4,
+          "min": -2,
+          "max": 9
+        },
+        "weather": {
+          "main": "Clouds",
+          "description": "阴天",
+          "icon": "04d"
+        },
+        "snow": 0,
+        "precipitation": 0,
+        "snowCondition": {
+          "score": 25,
+          "level": 1,
+          "condition": "good",
+          "description": "良好",
+          "isSnowing": false
+        }
+      }
+    },
+    "id": "mmcx396pognmj6d2xej"
+  },
+  {
+    "prices": [
+      {
+        "route": "HKG-NRT",
+        "date": "2026-03-27",
+        "returnDate": "2026-03-29",
+        "price": 3080,
+        "currency": "CNY",
+        "outboundAirport": "NRT",
+        "flightNumber": "UO542",
+        "departureTime": "20:05",
+        "arrivalTime": "14:30",
+        "returnAirport": "NRT",
+        "returnFlightNumber": "UO651",
+        "returnDepartureTime": "20:40",
+        "returnArrivalTime": "00:35",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "17h 25m",
+        "returnDuration": "4h 55m",
+        "stops": 2,
+        "returnStops": 0,
+        "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/gtus/1/12191.14788.2026-03-27/air/trava/flights?itinerary=flight|-32228|542|12191|2026-03-27T20:05|12071|2026-03-27T21:10|125|-|-|-;flight|-32659|987|12071|2026-03-28T01:10|14008|2026-03-28T03:45|95|-|-|-;flight|-32659|862|14008|2026-03-28T09:30|14788|2026-03-28T14:30|240|-|-|-&carriers=-32228,-32659&operators=-32228;-32659;-32659&passengers=1&channel=website&cabin_class=economy&fps_session_id=b04b9e74-78ce-4541-b770-a2d23c830d37&ticket_price=2041.94&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52JJLyktFmLmmB8vxcxxpFihYeL0c2xGTAqMVczOfpEAC5whGyEAAAA|469995356928996067|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:49&transfer_protection=protected&pqid=true&fare_type=base_fare",
+        "outboundBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/gtus/1/12191.14788.2026-03-27/air/trava/flights?itinerary=flight|-32228|542|12191|2026-03-27T20:05|12071|2026-03-27T21:10|125|-|-|-;flight|-32659|987|12071|2026-03-28T01:10|14008|2026-03-28T03:45|95|-|-|-;flight|-32659|862|14008|2026-03-28T09:30|14788|2026-03-28T14:30|240|-|-|-&carriers=-32228,-32659&operators=-32228;-32659;-32659&passengers=1&channel=website&cabin_class=economy&fps_session_id=b04b9e74-78ce-4541-b770-a2d23c830d37&ticket_price=2041.94&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52JJLyktFmLmmB8vxcxxpFihYeL0c2xGTAqMVczOfpEAC5whGyEAAAA|469995356928996067|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:49&transfer_protection=protected&pqid=true&fare_type=base_fare",
+        "returnBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/vaya/1/14788.12191.2026-03-29/air/trava/flights?itinerary=flight|-32228|651|14788|2026-03-29T20:40|12191|2026-03-30T00:35|295|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=1c9567c5-6844-4432-9d4d-80fef08ed575&ticket_price=1038.22&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52IpS6xMFGLmOFIsxcwxP16h4frCc2xGTAqMVczOfpEALOq1FCEAAAA|-5297844732979904009|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:39:44&pqid=true&fare_type=base_fare",
+        "agentName": "gtus",
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO542",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "20:05",
+            "date": "2026-03-27",
+            "datetime": "2026-03-27T20:05:00"
+          },
+          "arrival": {
+            "airport": "NRT",
+            "airportName": "Tokyo Narita",
+            "terminal": "",
+            "time": "14:30",
+            "date": "2026-03-28",
+            "datetime": "2026-03-28T14:30:00"
+          },
+          "duration": "17h 25m",
+          "durationMinutes": 1045,
+          "stops": 2,
+          "price": 2042,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/gtus/1/12191.14788.2026-03-27/air/trava/flights?itinerary=flight|-32228|542|12191|2026-03-27T20:05|12071|2026-03-27T21:10|125|-|-|-;flight|-32659|987|12071|2026-03-28T01:10|14008|2026-03-28T03:45|95|-|-|-;flight|-32659|862|14008|2026-03-28T09:30|14788|2026-03-28T14:30|240|-|-|-&carriers=-32228,-32659&operators=-32228;-32659;-32659&passengers=1&channel=website&cabin_class=economy&fps_session_id=b04b9e74-78ce-4541-b770-a2d23c830d37&ticket_price=2041.94&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52JJLyktFmLmmB8vxcxxpFihYeL0c2xGTAqMVczOfpEAC5whGyEAAAA|469995356928996067|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:49&transfer_protection=protected&pqid=true&fare_type=base_fare",
+          "agentName": "gtus"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO651",
+          "aircraft": "",
+          "departure": {
+            "airport": "NRT",
+            "airportName": "Tokyo Narita",
+            "terminal": "",
+            "time": "20:40",
+            "date": "2026-03-29",
+            "datetime": "2026-03-29T20:40:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "00:35",
+            "date": "2026-03-30",
+            "datetime": "2026-03-30T00:35:00"
+          },
+          "duration": "4h 55m",
+          "durationMinutes": 295,
+          "stops": 0,
+          "price": 1038,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/vaya/1/14788.12191.2026-03-29/air/trava/flights?itinerary=flight|-32228|651|14788|2026-03-29T20:40|12191|2026-03-30T00:35|295|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=1c9567c5-6844-4432-9d4d-80fef08ed575&ticket_price=1038.22&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52IpS6xMFGLmOFIsxcwxP16h4frCc2xGTAqMVczOfpEALOq1FCEAAAA|-5297844732979904009|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:39:44&pqid=true&fare_type=base_fare",
+          "agentName": "vaya"
+        }
+      }
+    ],
+    "timestamp": "2026-03-05T03:42:00.279Z",
+    "weather": {},
+    "id": "mmcx5yjph2e6in53gbu"
+  },
+  {
+    "prices": [
+      {
+        "route": "HKG-HND",
+        "date": "2026-03-20",
+        "returnDate": "2026-03-22",
+        "price": 4755,
+        "currency": "CNY",
+        "outboundAirport": "HND",
+        "flightNumber": "UO624",
+        "departureTime": "23:55",
+        "arrivalTime": "04:45",
+        "returnAirport": "HND",
+        "returnFlightNumber": "UO623",
+        "returnDepartureTime": "23:55",
+        "returnArrivalTime": "04:15",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "3h 50m",
+        "returnDuration": "5h 20m",
+        "stops": 0,
+        "returnStops": 0,
+        "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/fara/1/12191.12234.2026-03-20/air/trava/flights?itinerary=flight|-32228|624|12191|2026-03-20T23:55|12234|2026-03-21T04:45|230|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=c7babb6a-f054-4689-a393-0e78d2d3938e&ticket_price=3551.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mJJSyxKFGLmmB8vxcxxKl6hYc6ns2xGTAqMANrFhmUcAAAA|1131449055158597176|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:39:31&pqid=false&fare_type=base_fare",
+        "outboundBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/fara/1/12191.12234.2026-03-20/air/trava/flights?itinerary=flight|-32228|624|12191|2026-03-20T23:55|12234|2026-03-21T04:45|230|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=c7babb6a-f054-4689-a393-0e78d2d3938e&ticket_price=3551.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mJJSyxKFGLmmB8vxcxxKl6hYc6ns2xGTAqMANrFhmUcAAAA|1131449055158597176|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:39:31&pqid=false&fare_type=base_fare",
+        "returnBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/vaya/1/12234.12191.2026-03-22/air/trava/flights?itinerary=flight|-32228|623|12234|2026-03-22T23:55|12191|2026-03-23T04:15|320|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=c9827fa5-7f54-45a2-8c4f-375a4157818b&ticket_price=1204.47&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52IpS6xMFGLmOBUvxcwxP16h4dGfs2xGTAqMVczOfpEAZt2kXiEAAAA|9174660025708891102|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:40&pqid=true&fare_type=base_fare",
+        "agentName": "fara",
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO624",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "23:55",
+            "date": "2026-03-20",
+            "datetime": "2026-03-20T23:55:00"
+          },
+          "arrival": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "04:45",
+            "date": "2026-03-21",
+            "datetime": "2026-03-21T04:45:00"
+          },
+          "duration": "3h 50m",
+          "durationMinutes": 230,
+          "stops": 0,
+          "price": 3551,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/fara/1/12191.12234.2026-03-20/air/trava/flights?itinerary=flight|-32228|624|12191|2026-03-20T23:55|12234|2026-03-21T04:45|230|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=c7babb6a-f054-4689-a393-0e78d2d3938e&ticket_price=3551.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mJJSyxKFGLmmB8vxcxxKl6hYc6ns2xGTAqMANrFhmUcAAAA|1131449055158597176|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:39:31&pqid=false&fare_type=base_fare",
+          "agentName": "fara"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO623",
+          "aircraft": "",
+          "departure": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "23:55",
+            "date": "2026-03-22",
+            "datetime": "2026-03-22T23:55:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "04:15",
+            "date": "2026-03-23",
+            "datetime": "2026-03-23T04:15:00"
+          },
+          "duration": "5h 20m",
+          "durationMinutes": 320,
+          "stops": 0,
+          "price": 1204,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/vaya/1/12234.12191.2026-03-22/air/trava/flights?itinerary=flight|-32228|623|12234|2026-03-22T23:55|12191|2026-03-23T04:15|320|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=c9827fa5-7f54-45a2-8c4f-375a4157818b&ticket_price=1204.47&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52IpS6xMFGLmOBUvxcwxP16h4dGfs2xGTAqMVczOfpEAZt2kXiEAAAA|9174660025708891102|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:40&pqid=true&fare_type=base_fare",
+          "agentName": "vaya"
+        }
+      },
+      {
+        "route": "HKG-NRT",
+        "date": "2026-03-27",
+        "returnDate": "2026-03-29",
+        "price": 3080,
+        "currency": "CNY",
+        "outboundAirport": "NRT",
+        "flightNumber": "UO542",
+        "departureTime": "20:05",
+        "arrivalTime": "14:30",
+        "returnAirport": "NRT",
+        "returnFlightNumber": "UO651",
+        "returnDepartureTime": "20:40",
+        "returnArrivalTime": "00:35",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "17h 25m",
+        "returnDuration": "4h 55m",
+        "stops": 2,
+        "returnStops": 0,
+        "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/gtus/1/12191.14788.2026-03-27/air/trava/flights?itinerary=flight|-32228|542|12191|2026-03-27T20:05|12071|2026-03-27T21:10|125|-|-|-;flight|-32659|987|12071|2026-03-28T01:10|14008|2026-03-28T03:45|95|-|-|-;flight|-32659|862|14008|2026-03-28T09:30|14788|2026-03-28T14:30|240|-|-|-&carriers=-32228,-32659&operators=-32228;-32659;-32659&passengers=1&channel=website&cabin_class=economy&fps_session_id=b12dfea6-f726-41ef-891b-c6439cae85f0&ticket_price=2041.94&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52JJLyktFmLmmB8vxcxxpFihYeL0c2xGTAqMVczOfpEAC5whGyEAAAA|469995356928996067|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:49&transfer_protection=protected&pqid=true&fare_type=base_fare",
+        "outboundBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/gtus/1/12191.14788.2026-03-27/air/trava/flights?itinerary=flight|-32228|542|12191|2026-03-27T20:05|12071|2026-03-27T21:10|125|-|-|-;flight|-32659|987|12071|2026-03-28T01:10|14008|2026-03-28T03:45|95|-|-|-;flight|-32659|862|14008|2026-03-28T09:30|14788|2026-03-28T14:30|240|-|-|-&carriers=-32228,-32659&operators=-32228;-32659;-32659&passengers=1&channel=website&cabin_class=economy&fps_session_id=b12dfea6-f726-41ef-891b-c6439cae85f0&ticket_price=2041.94&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52JJLyktFmLmmB8vxcxxpFihYeL0c2xGTAqMVczOfpEAC5whGyEAAAA|469995356928996067|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:49&transfer_protection=protected&pqid=true&fare_type=base_fare",
+        "returnBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/vaya/1/14788.12191.2026-03-29/air/trava/flights?itinerary=flight|-32228|651|14788|2026-03-29T20:40|12191|2026-03-30T00:35|295|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=1c4104a6-5033-43ad-9a3d-f91fdd37e137&ticket_price=1038.22&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52IpS6xMFGLmOFIsxcwxP16h4frCc2xGTAqMVczOfpEALOq1FCEAAAA|-5297844732979904009|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:39:44&pqid=true&fare_type=base_fare",
+        "agentName": "gtus",
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO542",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "20:05",
+            "date": "2026-03-27",
+            "datetime": "2026-03-27T20:05:00"
+          },
+          "arrival": {
+            "airport": "NRT",
+            "airportName": "Tokyo Narita",
+            "terminal": "",
+            "time": "14:30",
+            "date": "2026-03-28",
+            "datetime": "2026-03-28T14:30:00"
+          },
+          "duration": "17h 25m",
+          "durationMinutes": 1045,
+          "stops": 2,
+          "price": 2042,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/gtus/1/12191.14788.2026-03-27/air/trava/flights?itinerary=flight|-32228|542|12191|2026-03-27T20:05|12071|2026-03-27T21:10|125|-|-|-;flight|-32659|987|12071|2026-03-28T01:10|14008|2026-03-28T03:45|95|-|-|-;flight|-32659|862|14008|2026-03-28T09:30|14788|2026-03-28T14:30|240|-|-|-&carriers=-32228,-32659&operators=-32228;-32659;-32659&passengers=1&channel=website&cabin_class=economy&fps_session_id=b12dfea6-f726-41ef-891b-c6439cae85f0&ticket_price=2041.94&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52JJLyktFmLmmB8vxcxxpFihYeL0c2xGTAqMVczOfpEAC5whGyEAAAA|469995356928996067|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:49&transfer_protection=protected&pqid=true&fare_type=base_fare",
+          "agentName": "gtus"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO651",
+          "aircraft": "",
+          "departure": {
+            "airport": "NRT",
+            "airportName": "Tokyo Narita",
+            "terminal": "",
+            "time": "20:40",
+            "date": "2026-03-29",
+            "datetime": "2026-03-29T20:40:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "00:35",
+            "date": "2026-03-30",
+            "datetime": "2026-03-30T00:35:00"
+          },
+          "duration": "4h 55m",
+          "durationMinutes": 295,
+          "stops": 0,
+          "price": 1038,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/vaya/1/14788.12191.2026-03-29/air/trava/flights?itinerary=flight|-32228|651|14788|2026-03-29T20:40|12191|2026-03-30T00:35|295|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=1c4104a6-5033-43ad-9a3d-f91fdd37e137&ticket_price=1038.22&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52IpS6xMFGLmOFIsxcwxP16h4frCc2xGTAqMVczOfpEALOq1FCEAAAA|-5297844732979904009|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:39:44&pqid=true&fare_type=base_fare",
+          "agentName": "vaya"
+        }
+      }
+    ],
+    "timestamp": "2026-03-05T03:51:56.740Z",
+    "weather": {
+      "2026-03-20": {
+        "date": "2026-03-20",
+        "temp": {
+          "day": 4,
+          "min": -2,
+          "max": 9
+        },
+        "weather": {
+          "main": "Clouds",
+          "description": "阴天",
+          "icon": "04d"
+        },
+        "snow": 0,
+        "precipitation": 0,
+        "snowCondition": {
+          "score": 25,
+          "level": 1,
+          "condition": "good",
+          "description": "良好",
+          "isSnowing": false
+        }
+      }
+    },
+    "id": "mmcxiqulbxvqnupq3an"
+  },
+  {
+    "prices": [
+      {
+        "route": "HKG↔HND",
+        "routeType": "direct",
+        "date": "2026-03-20",
+        "returnDate": "2026-03-22",
+        "price": 4755,
+        "currency": "CNY",
+        "outboundAirport": "HND",
+        "outboundAirportName": "羽田",
+        "flightNumber": "UO624",
+        "departureTime": "23:55",
+        "arrivalTime": "04:45",
+        "returnAirport": "HND",
+        "returnAirportName": "羽田",
+        "returnFlightNumber": "UO623",
+        "returnDepartureTime": "23:55",
+        "returnArrivalTime": "04:15",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "3h 50m",
+        "returnDuration": "5h 20m",
+        "stops": 0,
+        "returnStops": 0,
+        "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/fara/1/12191.12234.2026-03-20/air/trava/flights?itinerary=flight|-32228|624|12191|2026-03-20T23:55|12234|2026-03-21T04:45|230|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=78a5f684-ed03-4d81-8a65-cb3aedf4de51&ticket_price=3551.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mJJSyxKFGLmmB8vxcxxKl6hYc6ns2xGTAqMANrFhmUcAAAA|1131449055158597176|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:39:31&pqid=false&fare_type=base_fare",
+        "outboundBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/fara/1/12191.12234.2026-03-20/air/trava/flights?itinerary=flight|-32228|624|12191|2026-03-20T23:55|12234|2026-03-21T04:45|230|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=78a5f684-ed03-4d81-8a65-cb3aedf4de51&ticket_price=3551.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mJJSyxKFGLmmB8vxcxxKl6hYc6ns2xGTAqMANrFhmUcAAAA|1131449055158597176|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:39:31&pqid=false&fare_type=base_fare",
+        "returnBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/vaya/1/12234.12191.2026-03-22/air/trava/flights?itinerary=flight|-32228|623|12234|2026-03-22T23:55|12191|2026-03-23T04:15|320|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=02e55437-b22d-4baa-ab71-34f923afc3d3&ticket_price=1204.47&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52IpS6xMFGLmOBUvxcwxP16h4dGfs2xGTAqMVczOfpEAZt2kXiEAAAA|9174660025708891102|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:40&pqid=true&fare_type=base_fare",
+        "agentName": "fara",
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO624",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "23:55",
+            "date": "2026-03-20",
+            "datetime": "2026-03-20T23:55:00"
+          },
+          "arrival": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "04:45",
+            "date": "2026-03-21",
+            "datetime": "2026-03-21T04:45:00"
+          },
+          "duration": "3h 50m",
+          "durationMinutes": 230,
+          "stops": 0,
+          "price": 3551,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/fara/1/12191.12234.2026-03-20/air/trava/flights?itinerary=flight|-32228|624|12191|2026-03-20T23:55|12234|2026-03-21T04:45|230|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=78a5f684-ed03-4d81-8a65-cb3aedf4de51&ticket_price=3551.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mJJSyxKFGLmmB8vxcxxKl6hYc6ns2xGTAqMANrFhmUcAAAA|1131449055158597176|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:39:31&pqid=false&fare_type=base_fare",
+          "agentName": "fara"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO623",
+          "aircraft": "",
+          "departure": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "23:55",
+            "date": "2026-03-22",
+            "datetime": "2026-03-22T23:55:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "04:15",
+            "date": "2026-03-23",
+            "datetime": "2026-03-23T04:15:00"
+          },
+          "duration": "5h 20m",
+          "durationMinutes": 320,
+          "stops": 0,
+          "price": 1204,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/vaya/1/12234.12191.2026-03-22/air/trava/flights?itinerary=flight|-32228|623|12234|2026-03-22T23:55|12191|2026-03-23T04:15|320|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=02e55437-b22d-4baa-ab71-34f923afc3d3&ticket_price=1204.47&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52IpS6xMFGLmOBUvxcwxP16h4dGfs2xGTAqMVczOfpEAZt2kXiEAAAA|9174660025708891102|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:40&pqid=true&fare_type=base_fare",
+          "agentName": "vaya"
+        }
+      },
+      {
+        "route": "HKG↔NRT",
+        "routeType": "direct",
+        "date": "2026-03-27",
+        "returnDate": "2026-03-29",
+        "price": 3077,
+        "currency": "CNY",
+        "outboundAirport": "NRT",
+        "outboundAirportName": "成田",
+        "flightNumber": "UO542",
+        "departureTime": "20:05",
+        "arrivalTime": "14:30",
+        "returnAirport": "NRT",
+        "returnAirportName": "成田",
+        "returnFlightNumber": "UO651",
+        "returnDepartureTime": "20:40",
+        "returnArrivalTime": "00:35",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "17h 25m",
+        "returnDuration": "4h 55m",
+        "stops": 2,
+        "returnStops": 0,
+        "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/gtus/1/12191.14788.2026-03-27/air/trava/flights?itinerary=flight|-32228|542|12191|2026-03-27T20:05|12071|2026-03-27T21:10|125|-|-|-;flight|-32659|987|12071|2026-03-28T01:10|14008|2026-03-28T03:45|95|-|-|-;flight|-32659|862|14008|2026-03-28T09:30|14788|2026-03-28T14:30|240|-|-|-&carriers=-32228,-32659&operators=-32228;-32659;-32659&passengers=1&channel=website&cabin_class=economy&fps_session_id=f478cbf7-4570-4d5c-80db-b584f37cea26&ticket_price=2041.94&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52JJLyktFmLmmB8vxcxxpFihYeL0c2xGTAqMVczOfpEAC5whGyEAAAA|469995356928996067|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:49&transfer_protection=protected&pqid=true&fare_type=base_fare",
+        "outboundBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/gtus/1/12191.14788.2026-03-27/air/trava/flights?itinerary=flight|-32228|542|12191|2026-03-27T20:05|12071|2026-03-27T21:10|125|-|-|-;flight|-32659|987|12071|2026-03-28T01:10|14008|2026-03-28T03:45|95|-|-|-;flight|-32659|862|14008|2026-03-28T09:30|14788|2026-03-28T14:30|240|-|-|-&carriers=-32228,-32659&operators=-32228;-32659;-32659&passengers=1&channel=website&cabin_class=economy&fps_session_id=f478cbf7-4570-4d5c-80db-b584f37cea26&ticket_price=2041.94&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52JJLyktFmLmmB8vxcxxpFihYeL0c2xGTAqMVczOfpEAC5whGyEAAAA|469995356928996067|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:49&transfer_protection=protected&pqid=true&fare_type=base_fare",
+        "returnBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/skyp/1/14788.12191.2026-03-29/air/trava/flights?itinerary=flight|-32228|651|14788|2026-03-29T20:40|12191|2026-03-30T00:35|295|-|O|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=57087b2e-f506-4b66-a0cc-51dba66d0dd9&ticket_price=1035.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mIpzq4sEGLmOFIsxcwxP16h4frCc2xGTAqMAGf54kAcAAAA|1408230939683178026|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:59:48&pqid=true&fare_type=base_fare",
+        "agentName": "gtus",
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO542",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "20:05",
+            "date": "2026-03-27",
+            "datetime": "2026-03-27T20:05:00"
+          },
+          "arrival": {
+            "airport": "NRT",
+            "airportName": "Tokyo Narita",
+            "terminal": "",
+            "time": "14:30",
+            "date": "2026-03-28",
+            "datetime": "2026-03-28T14:30:00"
+          },
+          "duration": "17h 25m",
+          "durationMinutes": 1045,
+          "stops": 2,
+          "price": 2042,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/gtus/1/12191.14788.2026-03-27/air/trava/flights?itinerary=flight|-32228|542|12191|2026-03-27T20:05|12071|2026-03-27T21:10|125|-|-|-;flight|-32659|987|12071|2026-03-28T01:10|14008|2026-03-28T03:45|95|-|-|-;flight|-32659|862|14008|2026-03-28T09:30|14788|2026-03-28T14:30|240|-|-|-&carriers=-32228,-32659&operators=-32228;-32659;-32659&passengers=1&channel=website&cabin_class=economy&fps_session_id=f478cbf7-4570-4d5c-80db-b584f37cea26&ticket_price=2041.94&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52JJLyktFmLmmB8vxcxxpFihYeL0c2xGTAqMVczOfpEAC5whGyEAAAA|469995356928996067|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:49&transfer_protection=protected&pqid=true&fare_type=base_fare",
+          "agentName": "gtus"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO651",
+          "aircraft": "",
+          "departure": {
+            "airport": "NRT",
+            "airportName": "Tokyo Narita",
+            "terminal": "",
+            "time": "20:40",
+            "date": "2026-03-29",
+            "datetime": "2026-03-29T20:40:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "00:35",
+            "date": "2026-03-30",
+            "datetime": "2026-03-30T00:35:00"
+          },
+          "duration": "4h 55m",
+          "durationMinutes": 295,
+          "stops": 0,
+          "price": 1035,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/skyp/1/14788.12191.2026-03-29/air/trava/flights?itinerary=flight|-32228|651|14788|2026-03-29T20:40|12191|2026-03-30T00:35|295|-|O|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=57087b2e-f506-4b66-a0cc-51dba66d0dd9&ticket_price=1035.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mIpzq4sEGLmOFIsxcwxP16h4frCc2xGTAqMAGf54kAcAAAA|1408230939683178026|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:59:48&pqid=true&fare_type=base_fare",
+          "agentName": "skyp"
+        }
+      },
+      {
+        "route": "HKG→HND / NRT→HKG",
+        "routeType": "mixed",
+        "date": "2026-04-03",
+        "returnDate": "2026-04-05",
+        "price": 4192,
+        "currency": "CNY",
+        "outboundAirport": "HND",
+        "outboundAirportName": "羽田",
+        "flightNumber": "UO624",
+        "departureTime": "23:35",
+        "arrivalTime": "04:55",
+        "returnAirport": "NRT",
+        "returnAirportName": "成田",
+        "returnFlightNumber": "UO651",
+        "returnDepartureTime": "20:40",
+        "returnArrivalTime": "00:35",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "4h 20m",
+        "returnDuration": "4h 55m",
+        "stops": 0,
+        "returnStops": 0,
+        "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/cust/1/12191.12234.2026-04-03/air/trava/flights?itinerary=flight|-32228|624|12191|2026-04-03T23:35|12234|2026-04-04T04:55|260|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=1de94596-f488-45df-9ef3-5ed24688e0ca&ticket_price=2466.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-NS42JJLi0uEWLmmB8vxcxxKl6hoW3POTYjJgXGItbUPF13pypmZ79IAEDAS6YoAAAA|-8772224930270226662|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T04:00:30&pqid=true&fare_type=base_fare",
+        "outboundBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/cust/1/12191.12234.2026-04-03/air/trava/flights?itinerary=flight|-32228|624|12191|2026-04-03T23:35|12234|2026-04-04T04:55|260|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=1de94596-f488-45df-9ef3-5ed24688e0ca&ticket_price=2466.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-NS42JJLi0uEWLmmB8vxcxxKl6hoW3POTYjJgXGItbUPF13pypmZ79IAEDAS6YoAAAA|-8772224930270226662|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T04:00:30&pqid=true&fare_type=base_fare",
+        "returnBookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/skyp/1/14788.12191.2026-04-05/air/trava/flights?itinerary=flight|-32228|651|14788|2026-04-05T20:40|12191|2026-04-06T00:35|295|-|X|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=271d48cb-4669-49d2-8b76-ceed6c42b3e1&ticket_price=1726.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mIpzq4sEGLmOFIsxcwxP16h4cyxc2xGTAqMAHGmIi8cAAAA|-3358458526691420715|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T04:00:35&pqid=true&fare_type=base_fare",
+        "agentName": "cust",
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO624",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "23:35",
+            "date": "2026-04-03",
+            "datetime": "2026-04-03T23:35:00"
+          },
+          "arrival": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "04:55",
+            "date": "2026-04-04",
+            "datetime": "2026-04-04T04:55:00"
+          },
+          "duration": "4h 20m",
+          "durationMinutes": 260,
+          "stops": 0,
+          "price": 2466,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/cust/1/12191.12234.2026-04-03/air/trava/flights?itinerary=flight|-32228|624|12191|2026-04-03T23:35|12234|2026-04-04T04:55|260|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=1de94596-f488-45df-9ef3-5ed24688e0ca&ticket_price=2466.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-NS42JJLi0uEWLmmB8vxcxxKl6hoW3POTYjJgXGItbUPF13pypmZ79IAEDAS6YoAAAA|-8772224930270226662|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T04:00:30&pqid=true&fare_type=base_fare",
+          "agentName": "cust"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO651",
+          "aircraft": "",
+          "departure": {
+            "airport": "NRT",
+            "airportName": "Tokyo Narita",
+            "terminal": "",
+            "time": "20:40",
+            "date": "2026-04-05",
+            "datetime": "2026-04-05T20:40:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "00:35",
+            "date": "2026-04-06",
+            "datetime": "2026-04-06T00:35:00"
+          },
+          "duration": "4h 55m",
+          "durationMinutes": 295,
+          "stops": 0,
+          "price": 1726,
+          "currency": "CNY",
+          "cabinClass": "Economy",
+          "bookingUrl": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/skyp/1/14788.12191.2026-04-05/air/trava/flights?itinerary=flight|-32228|651|14788|2026-04-05T20:40|12191|2026-04-06T00:35|295|-|X|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=271d48cb-4669-49d2-8b76-ceed6c42b3e1&ticket_price=1726.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mIpzq4sEGLmOFIsxcwxP16h4cyxc2xGTAqMAHGmIi8cAAAA|-3358458526691420715|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T04:00:35&pqid=true&fare_type=base_fare",
+          "agentName": "skyp"
+        }
+      }
+    ],
+    "timestamp": "2026-03-05T04:00:40.473Z",
+    "weather": {
+      "2026-03-20": {
+        "date": "2026-03-20",
+        "temp": {
+          "day": 4,
+          "min": -2,
+          "max": 9
+        },
+        "weather": {
+          "main": "Clouds",
+          "description": "阴天",
+          "icon": "04d"
+        },
+        "snow": 0,
+        "precipitation": 0,
+        "snowCondition": {
+          "score": 25,
+          "level": 1,
+          "condition": "good",
+          "description": "良好",
+          "isSnowing": false
+        }
+      }
+    },
+    "id": "mmcxtyvs4t1jn3yv99y"
+  },
+  {
+    "prices": [
+      {
+        "route": "HKG→HND / NRT→HKG",
+        "routeType": "mixed",
+        "date": "2026-03-13",
+        "returnDate": "2026-03-15",
+        "price": 7655,
+        "currency": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/fara/1/12191.12234.2026-03-13/air/trava/flights?itinerary=flight|-32228|624|12191|2026-03-13T23:55|12234|2026-03-14T04:45|230|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=5af481a5-d4b5-494c-b184-db5ff5254b35&ticket_price=5081.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mJJSyxKFGLmmB8vxcxxKl6hYfnZs2xGTAqMAEpfCuMcAAAA|-7758734391466474306|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:39:20&pqid=false&fare_type=base_fare",
+        "outboundAirport": "HND",
+        "outboundAirportName": "羽田",
+        "flightNumber": "UO624",
+        "departureTime": "23:55",
+        "arrivalTime": "04:45",
+        "returnAirport": "NRT",
+        "returnAirportName": "成田",
+        "returnFlightNumber": "UO693",
+        "returnDepartureTime": "20:55",
+        "returnArrivalTime": "01:25",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "3h 50m",
+        "returnDuration": "5h 30m",
+        "stops": 0,
+        "returnStops": 0,
+        "bookingUrl": "fara",
+        "outboundBookingUrl": "fara",
+        "returnBookingUrl": "skyp",
+        "agentName": null,
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO624",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "23:55",
+            "date": "2026-03-13",
+            "datetime": "2026-03-13T23:55:00"
+          },
+          "arrival": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "04:45",
+            "date": "2026-03-14",
+            "datetime": "2026-03-14T04:45:00"
+          },
+          "duration": "3h 50m",
+          "durationMinutes": 230,
+          "stops": 0,
+          "price": 5081,
+          "currency": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/fara/1/12191.12234.2026-03-13/air/trava/flights?itinerary=flight|-32228|624|12191|2026-03-13T23:55|12234|2026-03-14T04:45|230|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=5af481a5-d4b5-494c-b184-db5ff5254b35&ticket_price=5081.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mJJSyxKFGLmmB8vxcxxKl6hYfnZs2xGTAqMAEpfCuMcAAAA|-7758734391466474306|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:39:20&pqid=false&fare_type=base_fare",
+          "cabinClass": "Economy",
+          "bookingUrl": "fara"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO693",
+          "aircraft": "",
+          "departure": {
+            "airport": "NRT",
+            "airportName": "Tokyo Narita",
+            "terminal": "",
+            "time": "20:55",
+            "date": "2026-03-15",
+            "datetime": "2026-03-15T20:55:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "01:25",
+            "date": "2026-03-16",
+            "datetime": "2026-03-16T01:25:00"
+          },
+          "duration": "5h 30m",
+          "durationMinutes": 330,
+          "stops": 0,
+          "price": 2574,
+          "currency": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/skyp/1/14788.12191.2026-03-15/air/trava/flights?itinerary=flight|-32228|693|14788|2026-03-15T20:55|12191|2026-03-16T01:25|330|-|U|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=fd32b01d-95a8-4be0-a2f9-b1185916d628&ticket_price=2573.57&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mIpzq4sEGLmOFIsxcwxP16h4e31s2xGTAqMAG0hw10cAAAA|8936456935953604402|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-04T22:39:26&pqid=true&fare_type=base_fare",
+          "cabinClass": "Economy",
+          "bookingUrl": "skyp"
+        }
+      },
+      {
+        "route": "HKG↔HND",
+        "routeType": "direct",
+        "date": "2026-03-20",
+        "returnDate": "2026-03-22",
+        "price": 4755,
+        "currency": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/fara/1/12191.12234.2026-03-20/air/trava/flights?itinerary=flight|-32228|624|12191|2026-03-20T23:55|12234|2026-03-21T04:45|230|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=a727c923-38d0-48f1-b61e-c295a5273230&ticket_price=3551.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mJJSyxKFGLmmB8vxcxxKl6hYc6ns2xGTAqMANrFhmUcAAAA|1131449055158597176|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:39:31&pqid=false&fare_type=base_fare",
+        "outboundAirport": "HND",
+        "outboundAirportName": "羽田",
+        "flightNumber": "UO624",
+        "departureTime": "23:55",
+        "arrivalTime": "04:45",
+        "returnAirport": "HND",
+        "returnAirportName": "羽田",
+        "returnFlightNumber": "UO623",
+        "returnDepartureTime": "23:55",
+        "returnArrivalTime": "04:15",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "3h 50m",
+        "returnDuration": "5h 20m",
+        "stops": 0,
+        "returnStops": 0,
+        "bookingUrl": "fara",
+        "outboundBookingUrl": "fara",
+        "returnBookingUrl": "vaya",
+        "agentName": null,
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO624",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "23:55",
+            "date": "2026-03-20",
+            "datetime": "2026-03-20T23:55:00"
+          },
+          "arrival": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "04:45",
+            "date": "2026-03-21",
+            "datetime": "2026-03-21T04:45:00"
+          },
+          "duration": "3h 50m",
+          "durationMinutes": 230,
+          "stops": 0,
+          "price": 3551,
+          "currency": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/fara/1/12191.12234.2026-03-20/air/trava/flights?itinerary=flight|-32228|624|12191|2026-03-20T23:55|12234|2026-03-21T04:45|230|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=a727c923-38d0-48f1-b61e-c295a5273230&ticket_price=3551.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mJJSyxKFGLmmB8vxcxxKl6hYc6ns2xGTAqMANrFhmUcAAAA|1131449055158597176|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:39:31&pqid=false&fare_type=base_fare",
+          "cabinClass": "Economy",
+          "bookingUrl": "fara"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO623",
+          "aircraft": "",
+          "departure": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "23:55",
+            "date": "2026-03-22",
+            "datetime": "2026-03-22T23:55:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "04:15",
+            "date": "2026-03-23",
+            "datetime": "2026-03-23T04:15:00"
+          },
+          "duration": "5h 20m",
+          "durationMinutes": 320,
+          "stops": 0,
+          "price": 1204,
+          "currency": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/vaya/1/12234.12191.2026-03-22/air/trava/flights?itinerary=flight|-32228|623|12234|2026-03-22T23:55|12191|2026-03-23T04:15|320|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=aa6851eb-50d2-49c8-8f3a-5ddf42f9b899&ticket_price=1204.47&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52IpS6xMFGLmOBUvxcwxP16h4dGfs2xGTAqMVczOfpEAZt2kXiEAAAA|9174660025708891102|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:40&pqid=true&fare_type=base_fare",
+          "cabinClass": "Economy",
+          "bookingUrl": "vaya"
+        }
+      },
+      {
+        "route": "HKG↔NRT",
+        "routeType": "direct",
+        "date": "2026-03-27",
+        "returnDate": "2026-03-29",
+        "price": 3077,
+        "currency": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/gtus/1/12191.14788.2026-03-27/air/trava/flights?itinerary=flight|-32228|542|12191|2026-03-27T20:05|12071|2026-03-27T21:10|125|-|-|-;flight|-32659|987|12071|2026-03-28T01:10|14008|2026-03-28T03:45|95|-|-|-;flight|-32659|862|14008|2026-03-28T09:30|14788|2026-03-28T14:30|240|-|-|-&carriers=-32228,-32659&operators=-32228;-32659;-32659&passengers=1&channel=website&cabin_class=economy&fps_session_id=b03981fb-f75e-4c3c-9725-3e58e819348e&ticket_price=2041.94&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52JJLyktFmLmmB8vxcxxpFihYeL0c2xGTAqMVczOfpEAC5whGyEAAAA|469995356928996067|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:49&transfer_protection=protected&pqid=true&fare_type=base_fare",
+        "outboundAirport": "NRT",
+        "outboundAirportName": "成田",
+        "flightNumber": "UO542",
+        "departureTime": "20:05",
+        "arrivalTime": "14:30",
+        "returnAirport": "NRT",
+        "returnAirportName": "成田",
+        "returnFlightNumber": "UO651",
+        "returnDepartureTime": "20:40",
+        "returnArrivalTime": "00:35",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "17h 25m",
+        "returnDuration": "4h 55m",
+        "stops": 2,
+        "returnStops": 0,
+        "bookingUrl": "gtus",
+        "outboundBookingUrl": "gtus",
+        "returnBookingUrl": "skyp",
+        "agentName": null,
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO542",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "20:05",
+            "date": "2026-03-27",
+            "datetime": "2026-03-27T20:05:00"
+          },
+          "arrival": {
+            "airport": "NRT",
+            "airportName": "Tokyo Narita",
+            "terminal": "",
+            "time": "14:30",
+            "date": "2026-03-28",
+            "datetime": "2026-03-28T14:30:00"
+          },
+          "duration": "17h 25m",
+          "durationMinutes": 1045,
+          "stops": 2,
+          "price": 2042,
+          "currency": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/gtus/1/12191.14788.2026-03-27/air/trava/flights?itinerary=flight|-32228|542|12191|2026-03-27T20:05|12071|2026-03-27T21:10|125|-|-|-;flight|-32659|987|12071|2026-03-28T01:10|14008|2026-03-28T03:45|95|-|-|-;flight|-32659|862|14008|2026-03-28T09:30|14788|2026-03-28T14:30|240|-|-|-&carriers=-32228,-32659&operators=-32228;-32659;-32659&passengers=1&channel=website&cabin_class=economy&fps_session_id=b03981fb-f75e-4c3c-9725-3e58e819348e&ticket_price=2041.94&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS52JJLyktFmLmmB8vxcxxpFihYeL0c2xGTAqMVczOfpEAC5whGyEAAAA|469995356928996067|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:11:49&transfer_protection=protected&pqid=true&fare_type=base_fare",
+          "cabinClass": "Economy",
+          "bookingUrl": "gtus"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO651",
+          "aircraft": "",
+          "departure": {
+            "airport": "NRT",
+            "airportName": "Tokyo Narita",
+            "terminal": "",
+            "time": "20:40",
+            "date": "2026-03-29",
+            "datetime": "2026-03-29T20:40:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "00:35",
+            "date": "2026-03-30",
+            "datetime": "2026-03-30T00:35:00"
+          },
+          "duration": "4h 55m",
+          "durationMinutes": 295,
+          "stops": 0,
+          "price": 1035,
+          "currency": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/skyp/1/14788.12191.2026-03-29/air/trava/flights?itinerary=flight|-32228|651|14788|2026-03-29T20:40|12191|2026-03-30T00:35|295|-|O|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=7bdfe565-61e8-45c2-ad2a-738015f00e22&ticket_price=1035.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mIpzq4sEGLmOFIsxcwxP16h4frCc2xGTAqMAGf54kAcAAAA|1408230939683178026|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T03:59:48&pqid=true&fare_type=base_fare",
+          "cabinClass": "Economy",
+          "bookingUrl": "skyp"
+        }
+      },
+      {
+        "route": "HKG→HND / NRT→HKG",
+        "routeType": "mixed",
+        "date": "2026-04-03",
+        "returnDate": "2026-04-05",
+        "price": 3791,
+        "currency": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/jtus/1/12191.12234.2026-04-03/air/trava/flights?itinerary=flight|-32228|624|12191|2026-04-03T23:35|12234|2026-04-04T04:55|260|-|-|JALITE&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=261c92e7-ce9a-4ce3-ab44-d2338174e4ac&ticket_price=2442.60&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mLJKiktFmLmmB8vxcxxKl6hoW3POTYjJgVGAIjW8vEcAAAA|-2935483726668661617|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T04:09:48&pqid=true&fare_type=base_fare",
+        "outboundAirport": "HND",
+        "outboundAirportName": "羽田",
+        "flightNumber": "UO624",
+        "departureTime": "23:35",
+        "arrivalTime": "04:55",
+        "returnAirport": "NRT",
+        "returnAirportName": "成田",
+        "returnFlightNumber": "UO653",
+        "returnDepartureTime": "21:35",
+        "returnArrivalTime": "01:30",
+        "airline": "Hong Kong Express",
+        "airlineCode": "UO",
+        "aircraft": "",
+        "duration": "4h 20m",
+        "returnDuration": "4h 55m",
+        "stops": 0,
+        "returnStops": 0,
+        "bookingUrl": "jtus",
+        "outboundBookingUrl": "jtus",
+        "returnBookingUrl": "cust",
+        "agentName": null,
+        "outboundDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO624",
+          "aircraft": "",
+          "departure": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "23:35",
+            "date": "2026-04-03",
+            "datetime": "2026-04-03T23:35:00"
+          },
+          "arrival": {
+            "airport": "HND",
+            "airportName": "Tokyo Haneda",
+            "terminal": "",
+            "time": "04:55",
+            "date": "2026-04-04",
+            "datetime": "2026-04-04T04:55:00"
+          },
+          "duration": "4h 20m",
+          "durationMinutes": 260,
+          "stops": 0,
+          "price": 2443,
+          "currency": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/jtus/1/12191.12234.2026-04-03/air/trava/flights?itinerary=flight|-32228|624|12191|2026-04-03T23:35|12234|2026-04-04T04:55|260|-|-|JALITE&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=261c92e7-ce9a-4ce3-ab44-d2338174e4ac&ticket_price=2442.60&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mLJKiktFmLmmB8vxcxxKl6hoW3POTYjJgVGAIjW8vEcAAAA|-2935483726668661617|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T04:09:48&pqid=true&fare_type=base_fare",
+          "cabinClass": "Economy",
+          "bookingUrl": "jtus"
+        },
+        "returnDetails": {
+          "airline": "UO",
+          "airlineName": "HK Express",
+          "flightNumber": "UO653",
+          "aircraft": "",
+          "departure": {
+            "airport": "NRT",
+            "airportName": "Tokyo Narita",
+            "terminal": "",
+            "time": "21:35",
+            "date": "2026-04-05",
+            "datetime": "2026-04-05T21:35:00"
+          },
+          "arrival": {
+            "airport": "HKG",
+            "airportName": "Hong Kong Intl",
+            "terminal": "",
+            "time": "01:30",
+            "date": "2026-04-06",
+            "datetime": "2026-04-06T01:30:00"
+          },
+          "duration": "4h 55m",
+          "durationMinutes": 295,
+          "stops": 0,
+          "price": 1348,
+          "currency": "https://www.skyscanner.com/transport_deeplink/4.0/US/en-GB/CNY/cust/1/14788.12191.2026-04-05/air/trava/flights?itinerary=flight|-32228|653|14788|2026-04-05T21:35|12191|2026-04-06T01:30|295|-|-|-&carriers=-32228&operators=-32228&passengers=1&channel=website&cabin_class=economy&fps_session_id=30c328c5-c69c-4378-be9d-6e3cd220b37a&ticket_price=1348.00&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-NS42JJLi0uEWLmOFIsxcwxP16h4cyxc2xGTAqMRaypebruTlXMzn6RAPqmg7YoAAAA|5882631067174005703|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2026-03-05T04:09:43&pqid=true&fare_type=base_fare",
+          "cabinClass": "Economy",
+          "bookingUrl": "cust"
+        }
+      }
+    ],
+    "timestamp": "2026-03-05T04:09:54.353Z",
+    "weather": {
+      "2026-03-13": {
+        "date": "2026-03-13",
+        "temp": {
+          "day": -1,
+          "min": -5,
+          "max": 2
+        },
+        "weather": {
+          "main": "Snow",
+          "description": "阵雪",
+          "icon": "13d"
+        },
+        "snow": 0.6,
+        "precipitation": 1.2,
+        "snowCondition": {
+          "score": 60,
+          "level": 3,
+          "condition": "excellent",
+          "description": "微量雪 - 极佳",
+          "isSnowing": true
+        }
+      },
+      "2026-03-20": {
+        "date": "2026-03-20",
+        "temp": {
+          "day": 4,
+          "min": -2,
+          "max": 9
+        },
+        "weather": {
+          "main": "Clouds",
+          "description": "阴天",
+          "icon": "04d"
+        },
+        "snow": 0,
+        "precipitation": 0,
+        "snowCondition": {
+          "score": 25,
+          "level": 1,
+          "condition": "good",
+          "description": "良好",
+          "isSnowing": false
+        }
+      }
+    },
+    "id": "mmcy5ub4q82hc7r626f"
+  }
+]

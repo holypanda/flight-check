@@ -2,118 +2,67 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Build, Lint, and Test Commands
+## Build and Run Commands
 
-This is a Node.js project with Python crawler:
+- **Install Dependencies**: `npm install`
+- **Start Server**: `npm start` (Express on port 3000)
+- **Run Tests**: `npm test` (Jest — no tests implemented yet)
 
-- **Install Node Dependencies**: `npm install`
-- **Install Python Dependencies**: `pip install selenium-wire selenium pandas`
-- **Start Server**: `npm start` or `node server.js`
-- **Run Tests**: `npm test` (if configured)
+## Architecture
 
-## Architecture and Structure
+Flight Price Monitor for HKG ↔ Tokyo weekend trips. Node.js/Express backend with vanilla JS frontend (Chinese-language UI).
 
-This is a Flight Price Monitor System that tracks flight prices using Ctrip (携程) web crawler.
-
-### Directory Structure
+### Data Flow
 
 ```
-flight-check/
-├── server.js              # Express main server, API routes
-├── services/
-│   ├── ctrip.js           # Ctrip crawler integration
-│   ├── ctrip_crawler.py   # Python crawler script (Selenium-based)
-│   ├── scheduler.js       # Cron job for hourly price updates
-│   └── storage.js         # JSON file persistence
-├── public/                # Static frontend files
-│   ├── index.html         # Main UI
-│   ├── script.js          # Frontend logic, Chart.js visualization
-│   └── style.css          # Styling
-└── data/                  # Data storage (JSON files)
-    ├── config.json        # Crawler configuration
-    └── prices.json        # Price history snapshots
+Frontend (public/) → Express API (server.js) → Services → External APIs
+                                                  ├── flightSearch.js  → flightapi.js → FlightAPI.io REST API
+                                                  ├── weather.js       → Open-Meteo API (no key needed)
+                                                  └── storage.js       → data/prices.json, data/config.json
 ```
 
-### Key Features
+1. User enters FlightAPI.io key via web UI → validated and stored in `data/config.json`
+2. Manual refresh triggers `flightSearch.searchWeekendFlights()` which generates Fri→Sun pairs for the next 30 days
+3. For each weekend: searches 4 airport combos (HKG↔HND, HKG↔NRT, and mixed-airport returns), finds cheapest outbound+return pairing
+4. Results enriched with Open-Meteo weather/snow data for Yuzawa (ski conditions)
+5. Snapshot appended to `data/prices.json` (max 100 entries)
+6. Frontend renders price chart (Chart.js) and flight table with copy-to-clipboard
 
-- **Route**: HKG (Hong Kong) ↔ HND (Tokyo Haneda)
-- **Schedule**: Friday departure, Sunday return (weekend trips)
-- **Range**: Next 3 months of weekends
-- **Airline**: Hong Kong Airlines (香港航空) only
-- **Departure Time**: After 10:00 AM only
-- **Currency**: HKD (converted from CNY)
-- **Update Frequency**: Every hour
-- **Data Source**: Ctrip (携程) web scraping via Selenium
+### Key Services
 
-### Python Crawler Requirements
-
-The crawler requires Python 3.6+ with the following packages:
-
-```bash
-pip install selenium-wire selenium pandas
-```
-
-Also requires Chrome/Chromium browser and ChromeDriver installed.
+- **flightSearch.js** — Orchestrates multi-airport weekend searches, filters by airline (UO/Hong Kong Express) and departure time (after 19:55), combines cheapest outbound+return
+- **flightapi.js** — FlightAPI.io client; parses Skyscanner-format responses (legs, segments, places, carriers maps)
+- **weather.js** — Open-Meteo integration with WMO weather code interpretation and 5-level snow condition rating
+- **storage.js** — JSON file persistence for prices and config
+- **scheduler.js** — Cron scheduler (currently disabled, manual trigger only)
+- **ctrip.js / ctrip_crawler.py** — Legacy Ctrip Selenium crawler (disabled, replaced by FlightAPI.io)
 
 ### API Endpoints
 
-- `GET /api/prices` - Get all price snapshots
-- `DELETE /api/prices/:id` - Delete a specific snapshot
-- `GET /api/config` - Get crawler status
-- `POST /api/config` - Enable crawler and trigger search
-- `DELETE /api/config` - Disable crawler
-- `POST /api/refresh` - Manual price refresh
+| Method | Endpoint | Purpose |
+|--------|----------|---------|
+| GET | `/api/prices` | All price history snapshots |
+| DELETE | `/api/prices/:id` | Delete a snapshot |
+| GET | `/api/config` | Check if API key is configured |
+| POST | `/api/config` | Save and validate FlightAPI key |
+| DELETE | `/api/config` | Remove API key |
+| POST | `/api/refresh` | Trigger flight search |
+| GET | `/api/weather?dates=YYYY-MM-DD,...` | Weather forecasts |
+| POST | `/api/test-connection` | Validate API key |
 
-### Data Model
+### Search Constraints
 
-Price snapshot:
-```json
-{
-  "id": "unique-id",
-  "timestamp": "2026-03-04T06:28:19.293Z",
-  "prices": [
-    {
-      "route": "HKG-HND",
-      "from": "HKG",
-      "to": "HND",
-      "price": 301.52,
-      "currency": "HKD",
-      "date": "2026-03-06",
-      "returnDate": "2026-03-08",
-      "airline": "国泰航空",
-      "flightNumber": "CX500",
-      "returnFlightNumber": "CX501",
-      "departureTime": "08:30",
-      "arrivalTime": "12:45",
-      "duration": "4h 15m",
-      "bookingUrl": "https://flights.ctrip.com/online/list/roundtrip-香港-东京?depdate=2026-03-06_2026-03-08",
-      "outboundBookingUrl": "https://flights.ctrip.com/online/list/oneway-香港-东京?depdate=2026-03-06",
-      "returnBookingUrl": "https://flights.ctrip.com/online/list/oneway-东京-香港?depdate=2026-03-08",
-      "source": "ctrip"
-    }
-  ]
-}
-```
+- **Routes**: HKG ↔ HND, HKG ↔ NRT (including mixed-airport returns)
+- **Schedule**: Friday departure, Sunday return
+- **Range**: Next 30 days of weekends
+- **Airline filter**: UO (Hong Kong Express)
+- **Departure filter**: After 19:55
+- **Currency**: HKD
 
-### New Fields
+## Code Patterns
 
-- `flightNumber`: 去程航班号
-- `returnFlightNumber`: 返程航班号
-- `departureTime`: 出发时间
-- `arrivalTime`: 到达时间
-- `duration`: 飞行时长
-- `bookingUrl`: 往返组合购票链接
-- `outboundBookingUrl`: 去程购票链接
-- `returnBookingUrl`: 返程购票链接
-
-### Crawler Fallback
-
-If the Python crawler fails (e.g., due to missing dependencies or Ctrip blocking), it automatically falls back to mock data for demonstration purposes.
-
-## Code Style Guidelines
-
-- Use async/await for asynchronous operations
-- Use try/catch for error handling
-- Console.log for operational logging
-- Return consistent JSON responses from APIs
-- Python crawler outputs JSON to stdout for Node.js parsing
+- Async/await throughout with try/catch error handling
+- Console logging with prefixes: `[FlightAPI]`, `[FlightSearch]`, `[Refresh]`
+- Frontend uses vanilla JS with event listeners, no framework
+- Clipboard API with `execCommand('copy')` fallback
+- `isRefreshing` flag prevents duplicate search submissions

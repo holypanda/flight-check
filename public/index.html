@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Flight Price Monitor</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -10,8 +10,12 @@
 <body>
     <div class="container">
         <header>
-            <h1>✈️ 香港往返东京监测器</h1>
-            <p>每小时追踪香港快运航空票价 <span id="countdown" class="countdown"></span></p>
+            <div class="header-title">
+                <h1>✈️ 香港往返东京监测器</h1>
+            </div>
+            <div class="header-subtitle">
+                <p>智能追踪最便宜的HK往返东京的红眼航班 <span id="countdown" class="countdown"></span></p>
+            </div>
         </header>
 
         <main>
@@ -19,21 +23,54 @@
 
             <section class="config-section">
                 <h2>Configuration</h2>
-                <div class="filter-info" style="margin-bottom: 15px; padding: 10px; background: #e8f4f8; border-radius: 4px; font-size: 0.9em;">
-                    <strong>筛选条件：</strong>
-                    <span>📅 周五出发周日回</span> •
-                    <span>🌙 去程 20:00+</span> • 
-                    <span>🌙 返程 20:00+</span> •
-                    <span>📆 未来30天</span>
+                <div class="filter-info">
+                    <div class="filter-title">📋 筛选条件</div>
+                    <div class="filter-tags">
+                        <span class="filter-tag">🗺️ <select id="route-select">
+                            <option value="hkg-tokyo" selected>HKG ↔ 东京</option>
+                            <option value="pek-hkg">北京 ↔ HKG</option>
+                        </select></span>
+                        <span class="filter-tag">📅 周五出发周日回</span>
+                        <span class="filter-tag">🌙 19:55+</span>
+                        <span class="filter-tag">✈️ <select id="airline-select">
+                            <option value="UO" selected>香港快运 UO</option>
+                            <option value="">不限航司</option>
+                        </select></span>
+                        <span class="filter-tag">📆 <select id="months-select">
+                            <option value="1" selected>未来 1 个月</option>
+                            <option value="2">未来 2 个月</option>
+                            <option value="3">未来 3 个月</option>
+                            <option value="4">未来 4 个月</option>
+                            <option value="5">未来 5 个月</option>
+                            <option value="6">未来 6 个月</option>
+                            <option value="7">未来 7 个月</option>
+                            <option value="8">未来 8 个月</option>
+                            <option value="9">未来 9 个月</option>
+                            <option value="10">未来 10 个月</option>
+                            <option value="11">未来 11 个月</option>
+                            <option value="12">未来 12 个月</option>
+                        </select></span>
+                        <span class="filter-tag warning">⚠️ 点击按钮才搜索（节省API）</span>
+                    </div>
                 </div>
                 <div class="input-group" id="key-input-group">
-                    <span>点击按钮获取最新机票价格（需要约30秒）</span>
-                    <button id="save-key-btn" style="background-color: #27ae60;">🔄 更新价格</button>
+                    <div class="key-input-wrapper">
+                        <input type="text" id="api-key-input" placeholder="请输入 FlightAPI Key">
+                        <div class="button-group">
+                            <button id="save-key-btn">💾 保存 Key</button>
+                            <button id="refresh-btn">🔄 更新价格</button>
+                        </div>
+                        <span class="api-key-hint">没有 API Key？去 <a href="https://www.flightapi.io/" target="_blank">flightapi.io</a> 注册获取</span>
+                    </div>
                 </div>
                 <div class="input-group" id="key-display-group" style="display: none;">
-                    <span>爬虫状态: <span id="masked-key">运行中</span></span>
-                    <button id="save-key-btn" style="background-color: #27ae60;">🔄 更新价格</button>
-                    <button id="remove-key-btn" style="background-color: #ff4d4d;">停止</button>
+                    <div class="key-display-wrapper">
+                        <span class="api-status">API状态: <span id="masked-key">已配置</span></span>
+                        <div class="button-group">
+                            <button id="refresh-btn-2">🔄 更新价格</button>
+                            <button id="remove-key-btn" class="btn-danger">停止</button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -55,6 +92,7 @@
                                 <th>航班信息</th>
                                 <th>价格</th>
                                 <th>越后汤泽天气/雪况 🏔️</th>
+                                <th>购票</th>
                             </tr>
                         </thead>
                         <tbody>
